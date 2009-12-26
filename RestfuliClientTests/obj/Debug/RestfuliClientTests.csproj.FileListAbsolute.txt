@@ -1,0 +1,7 @@
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\RestfuliClientTests\bin\Debug\RestfuliClientTests.dll
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\RestfuliClientTests\bin\Debug\RestfuliClientTests.pdb
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\RestfuliClientTests\bin\Debug\RestfulieClient.dll
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\RestfuliClientTests\bin\Debug\RestfulieClient.pdb
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\RestfuliClientTests\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\RestfuliClientTests\obj\Debug\RestfuliClientTests.dll
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\RestfuliClientTests\obj\Debug\RestfuliClientTests.pdb

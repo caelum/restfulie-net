@@ -1,0 +1,29 @@
+Typical hypermedia aware resource representation
+
+Trying to follow the definition of a RESTful application supporting resources with hypermedia content, a resource would be:
+
+<order>	
+	<product>RESTful training</product>
+	<date>23/12/2009</date>
+	<atom:link rel="refresh" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+	<atom:link rel="update" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+	<atom:link rel="pay" href="http://www.caelum.com.br/orders/1/pay" xmlns:atom="http://www.w3.org/2005/Atom"/>
+	<atom:link rel="destroy" href="http://www.caelum.com.br/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+</order>
+
+Restfulie C#: client-side
+
+Example on accessing a resource and its services through the restfulie C# API:
+
+Resource resource = new Resource() 
+dynamic order = resource.FromXml("http://www.caelum.com.br/orders/3.xml");    
+
+Console.WriteLine(order.product) ;
+
+Executing a state transition:
+ order.Pay();
+ order.Cancel();
+ 
+ Following some limitations:
+  - it does not update resource on server
+  - it does not supports the method names with the characteres (-,?,!), very common in ruby codes.
