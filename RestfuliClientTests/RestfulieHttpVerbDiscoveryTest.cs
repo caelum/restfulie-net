@@ -95,7 +95,7 @@ namespace RestfuliClientTests
         {
             RestfulieHttpVerbDiscovery verbDiscovery = new RestfulieHttpVerbDiscovery();
             string verbName = verbDiscovery.GetHttpVerbByTransitionName("Transition Name not default");
-            Assert.AreEqual("get", verbName);
+            Assert.AreEqual("GET", verbName);
         }
     }
 }

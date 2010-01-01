@@ -13,3 +13,8 @@ C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieCli
 C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\restfulie-dotNet\RestfulieClient\RestfulieClient\RestfulieClient\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\restfulie-dotNet\RestfulieClient\RestfulieClient\RestfulieClient\obj\Debug\RestfulieClient.dll
 C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\RestfulieClient\restfulie-dotNet\RestfulieClient\RestfulieClient\RestfulieClient\obj\Debug\RestfulieClient.pdb
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfulieClient\bin\Debug\RestfulieClient.dll
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfulieClient\bin\Debug\RestfulieClient.pdb
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfulieClient\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfulieClient\obj\Debug\RestfulieClient.dll
+C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfulieClient\obj\Debug\RestfulieClient.pdb

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DynamicXmlResourceTest.cs" />
+    <Compile Include="EntryPointTests.cs" />
     <Compile Include="helpers\LoadDocument.cs" />
     <Compile Include="helpers\RemoteResourceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace RestfulieClient.resources
 {
-    public class ResourceService
+    public class EntryPointService
     {
         public IRemoteResourceService RemoteResourceService { get; set; }
 

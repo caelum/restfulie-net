@@ -66,7 +66,7 @@ namespace RestfuliClientTests
         public void ShoudBePossibleToLoadAResourceFromXml()
         {        
          
-            ResourceService resource = new ResourceService() { RemoteResourceService = RemoteResourceFactory.GetRemoteResource() };
+            EntryPointService resource = new EntryPointService() { RemoteResourceService = RemoteResourceFactory.GetRemoteResource() };
             dynamic order = resource.FromXml("http:\\localhost:3000\\order\\1.xml");
 
             // verificando os atributos do recurso
@@ -77,7 +77,7 @@ namespace RestfuliClientTests
         [Ignore]
         public void ShouldBePossibleToExecuteATransitionOfStateOfAResource()
         {                  
-            ResourceService resource = new ResourceService() { RemoteResourceService = RemoteResourceFactory.GetRemoteResource() };
+            EntryPointService resource = new EntryPointService() { RemoteResourceService = RemoteResourceFactory.GetRemoteResource() };
             dynamic order = resource.FromXml("http:\\localhost:3000\\order\\1.xml");
             Assert.IsNotNull(order.Pay());
 

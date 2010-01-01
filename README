@@ -15,9 +15,8 @@ Restfulie C#: client-side
 
 Example on accessing a resource and its services through the restfulie C# API:
 
-Resource resource = new Resource() 
-dynamic order = resource.FromXml("http://www.caelum.com.br/orders/3.xml");    
-
+EntryPoint entryPoint= new EntryPoint();
+dynamic order = entryPoint.At("http://www.caelum.com.br/orders/3.xml").Get();    
 Console.WriteLine(order.product) ;
 
 Executing a state transition:
