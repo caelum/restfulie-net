@@ -6,25 +6,37 @@ using System.Xml.Linq;
 using System.Dynamic;
 using RestfulieClient.resources;
 using System.Reflection;
+using RestfulieClient.service;
+using System.Net;
 
 namespace RestfulieClient.resources
 {
     public class DynamicXmlResource : DynamicObject
     {
 
+        private const string WEB_RESPONSE_PROPERTY = "WebResponse";
         private XElement xmlElement;
+        public HttpWebResponse WebResponse { get; set;}
         public IRemoteResourceService remoteResourceService { get; set; }
 
         public DynamicXmlResource(XElement xml)
         {
-            this.xmlElement = xml;  
+            this.xmlElement = xml;            
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            XElement firstElement = this.GetFirstElementWithName(binder.Name);
-            result = this.GetValueFromXmlElement(firstElement);
-            return result != null ? true : false ; 
+            if (!binder.Name.Equals(WEB_RESPONSE_PROPERTY))
+            {
+                XElement firstElement = this.GetFirstElementWithName(binder.Name);
+                result = this.GetValueFromXmlElement(firstElement);
+                return result != null ? true : false;
+            }
+            else
+            {
+                result = this.WebResponse;
+                return true;
+            }
         }        
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
@@ -32,7 +44,9 @@ namespace RestfulieClient.resources
             object value = this.GetValueFromAttributeName(binder.Name,"href");
             if (value == null)
                 throw new ArgumentException(string.Format("There is not method defined with name:", binder.Name));
-            result = this.InvokeRemoteResource(value.ToString(),binder.Name);
+            object response = this.InvokeRemoteResource(value.ToString(),binder.Name);
+            result = ((HttpRemoteResourceResponse)response).XmlRepresentation;
+            this.UpdateWebResponse(((HttpRemoteResourceResponse)response).WebResponse);
             return result != null ? true : false;
         }
 
@@ -59,7 +73,7 @@ namespace RestfulieClient.resources
             {
                 if (element.HasElements)
                 {
-                    return new DynamicXmlResource(element);
+                    return new DynamicXmlResource(element) {  remoteResourceService = this.remoteResourceService, WebResponse = this.WebResponse};
                 }
                 else
                 {
@@ -87,6 +101,11 @@ namespace RestfulieClient.resources
                 }
             }
             return null;
+        }
+
+        private void UpdateWebResponse(HttpWebResponse webResponse)
+        {
+            this.WebResponse = webResponse;
         }
 
 

@@ -97,6 +97,27 @@ namespace RestfuliClientTests
             dynamic order = entryPoint.Get();
         }
 
+        [TestMethod]
+        public  void ShoudBePossibleToGetAWebReponse()
+        {
+            EntryPoint entryPoint = new EntryPoint();
+            this.ConfigureEntryPointForTests(entryPoint);
+
+            dynamic order = entryPoint.At("http:\\localhost:3000\\order\\1.xml").Get();
+            Assert.IsNotNull(order.WebResponse);           
+        }
+
+        [TestMethod]
+        public void ShouldBePossibleToGetTheResponseStatusCode()
+        {
+            EntryPoint entryPoint = new EntryPoint();
+            this.ConfigureEntryPointForTests(entryPoint);
+
+            dynamic order = entryPoint.At("http:\\localhost:3000\\order\\1.xml").Get();
+            Assert.IsNotNull(order.WebResponse.StatusCode);           
+        }
+
+
         private void ConfigureEntryPointForTests(EntryPoint entryPoint)
         {
             EntryPointService entryPointService = new EntryPointService() { RemoteResourceService = RemoteResourceFactory.GetRemoteResource() };

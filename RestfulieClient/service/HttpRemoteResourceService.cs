@@ -18,10 +18,10 @@ namespace RestfulieClient.resources
             return InvokeRemoteUri(uri, httpVerb);
         }
 
-        public string GetResourceFromXml(string uri)
-        { 
-            return this.InvokeRemoteUri(uri, "get").ToString();
-        }
+        public object GetResourceFromXml(string uri)
+        {
+            return ((HttpRemoteResourceResponse)this.InvokeRemoteUri(uri, "get"));
+        }        
 
         private object InvokeRemoteUri(string uri, string httpVerb)
         {
@@ -30,9 +30,12 @@ namespace RestfulieClient.resources
             {
                 request.Method = httpVerb;
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
+                StreamReader reader = new StreamReader(response.GetResponseStream());                
                 string xml = reader.ReadToEnd();
-                return xml;
+                return new HttpRemoteResourceResponse() { XmlRepresentation = xml, WebResponse = response };
+                //response.StatusDescription;
+                //return xml;
+
             }
             catch (Exception ex)
             {

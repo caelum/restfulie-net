@@ -8,6 +8,6 @@ namespace RestfulieClient.resources
     public interface IRemoteResourceService
     {
         object Execute(string uri, string transitionName);
-        String GetResourceFromXml(string uri); 
+        object GetResourceFromXml(string uri); 
     } 
 }

@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "..\DynamicExperiences\WindowsFormsApplication1\WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{605B4980-059F-4D8D-A7A9-378800954164}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RestfulieClient.vsmdi
@@ -45,6 +47,16 @@ Global
 		{AD6766CF-FA52-4AB5-B3A4-81BD55BC92B1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AD6766CF-FA52-4AB5-B3A4-81BD55BC92B1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AD6766CF-FA52-4AB5-B3A4-81BD55BC92B1}.Release|x86.ActiveCfg = Release|Any CPU
+		{605B4980-059F-4D8D-A7A9-378800954164}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Debug|x86.ActiveCfg = Debug|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Debug|x86.Build.0 = Debug|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Release|Any CPU.ActiveCfg = Release|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Release|Mixed Platforms.Build.0 = Release|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Release|x86.ActiveCfg = Release|x86
+		{605B4980-059F-4D8D-A7A9-378800954164}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

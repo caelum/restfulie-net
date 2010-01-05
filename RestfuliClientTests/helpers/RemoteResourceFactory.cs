@@ -5,6 +5,8 @@ using System.Text;
 using RestfulieClient.resources;
 using Rhino.Mocks;
 using RestfulieClientTests.helpers;
+using RestfulieClient.service;
+using System.Net;
 
 namespace RestfuliClientTests.helpers
 {
@@ -15,8 +17,10 @@ namespace RestfuliClientTests.helpers
         {
             MockRepository mocks = new MockRepository();
             IRemoteResourceService remoteResourceService = mocks.DynamicMock<IRemoteResourceService>();
-            Expect.Call(remoteResourceService.Execute("", "")).IgnoreArguments().Repeat.Any().Return(new Object());
-            Expect.Call(remoteResourceService.GetResourceFromXml("")).IgnoreArguments().Repeat.Any().Return(new LoadDocument().GetDocumentContent("order.xml"));
+            HttpWebResponse response = mocks.DynamicMock<HttpWebResponse>();
+            Expect.Call(remoteResourceService.Execute("", "")).IgnoreArguments().Repeat.Any().Return(new HttpRemoteResourceResponse() { XmlRepresentation = "", WebResponse = null});
+            Expect.Call(remoteResourceService.GetResourceFromXml("")).IgnoreArguments().Repeat.Any().Return(new HttpRemoteResourceResponse() { XmlRepresentation = new LoadDocument().GetDocumentContent("order.xml"), WebResponse = response });
+            Expect.Call(response.StatusCode).Repeat.Any().Return(HttpStatusCode.OK);
             mocks.ReplayAll();
             return remoteResourceService;
         }

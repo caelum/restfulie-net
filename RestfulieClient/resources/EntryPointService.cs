@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using RestfulieClient.service;
 
 namespace RestfulieClient.resources
 {
@@ -11,10 +12,10 @@ namespace RestfulieClient.resources
         public IRemoteResourceService RemoteResourceService { get; set; }
 
         public dynamic FromXml(string uri)
-        { 
-            string xml = this.RemoteResourceService.GetResourceFromXml(uri);
-            XElement element = XElement.Parse(xml);
-            return new DynamicXmlResource(element) {  remoteResourceService = RemoteResourceService};
+        {
+            HttpRemoteResourceResponse response = (HttpRemoteResourceResponse)this.RemoteResourceService.GetResourceFromXml(uri); 
+            XElement element = XElement.Parse(response.XmlRepresentation);
+            return new DynamicXmlResource(element) {  remoteResourceService = RemoteResourceService, WebResponse = response.WebResponse};
         }
     }
 }
