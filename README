@@ -23,6 +23,10 @@ Executing a state transition:
  order.Pay();
  order.Cancel();
  
+Get the WebResponse Code and Headers:
+
+Console.WriteLine(order.WebResponse.StatusCode);
+ 
  Following some limitations:
   - it does not update resource on server
   - it does not supports the method names with the characteres (-,?,!), very common in ruby codes.
