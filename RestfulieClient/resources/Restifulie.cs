@@ -16,6 +16,12 @@ namespace RestfulieClient.resources
             this.entryPointURI = uri;
         }
 
+        private Restfulie(string uri, EntryPointService service)
+        {
+            this.EntryPointService = service;
+            this.entryPointURI = uri;
+        }
+
         public static Restfulie At(string uri)
         {
             Restfulie entryPoint = new Restfulie(uri);
@@ -24,7 +30,7 @@ namespace RestfulieClient.resources
 
         public static Restfulie At(string uri, EntryPointService service)
         {
-            Restfulie entryPoint = new Restfulie(uri);
+            Restfulie entryPoint = new Restfulie(uri,service);
             return entryPoint;
         }
 

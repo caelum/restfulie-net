@@ -80,7 +80,7 @@ namespace RestfuliClientTests
         [TestMethod]
         public void ShouldHasAnInstanceOfDefaultEntryPointServiceDefinedWithoutSetAConfiguration()
         {
-            Restfulie entryPoint = Restfulie.At("uri", GetEntryPointServiceForTests());
+            Restfulie entryPoint = Restfulie.At("uri");
             Assert.IsNotNull(entryPoint.EntryPointService);            
         }
 
@@ -95,14 +95,14 @@ namespace RestfuliClientTests
         [TestMethod]
         public void ShoudBePossibleToGetAWebReponse()
         {
-            dynamic order = Restfulie.At("http:\\localhost:3000\\order\\1.xml").Get();
+            dynamic order = Restfulie.At("http:\\localhost:3000\\order\\1.xml",GetEntryPointServiceForTests()).Get();
             Assert.IsNotNull(order.WebResponse);           
         }
 
         [TestMethod]
         public void ShouldBePossibleToGetTheResponseStatusCode()
         { 
-            dynamic order = Restfulie.At("http:\\localhost:3000\\order\\1.xml").Get();
+            dynamic order = Restfulie.At("http:\\localhost:3000\\order\\1.xml",GetEntryPointServiceForTests()).Get();
             Assert.IsNotNull(order.WebResponse.StatusCode);           
         }
 

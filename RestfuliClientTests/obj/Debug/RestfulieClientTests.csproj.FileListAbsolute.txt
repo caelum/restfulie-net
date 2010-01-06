@@ -39,3 +39,5 @@ C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\Rhino.Moc
 C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\obj\Debug\RestfuliClientTests.dll
 C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\obj\Debug\RestfuliClientTests.pdb
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\RestfulieClient_Accessor.dll
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\RestfulieClient_Accessor.pdb
