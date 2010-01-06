@@ -31,3 +31,11 @@ C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-cs
 C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfuliClientTests\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfuliClientTests\obj\Debug\RestfuliClientTests.dll
 C:\Documents and Settings\Luiz\Meus documentos\Luiz\projetos\dotNet\restfulie-csharp\RestfuliClientTests\obj\Debug\RestfuliClientTests.pdb
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\RestfuliClientTests.dll
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\RestfuliClientTests.pdb
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\RestfulieClient.dll
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\RestfulieClient.pdb
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\bin\Debug\Rhino.Mocks.xml
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\obj\Debug\RestfuliClientTests.dll
+C:\Users\Sergio Azevedo\restfulie-csharp\RestfuliClientTests\obj\Debug\RestfuliClientTests.pdb

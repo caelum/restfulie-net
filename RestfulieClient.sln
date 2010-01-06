@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "..\DynamicExperiences\WindowsFormsApplication1\WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{605B4980-059F-4D8D-A7A9-378800954164}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "..\WindowsFormsApplication1\WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{605B4980-059F-4D8D-A7A9-378800954164}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

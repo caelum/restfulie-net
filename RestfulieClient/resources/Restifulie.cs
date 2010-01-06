@@ -5,20 +5,27 @@ using System.Text;
 
 namespace RestfulieClient.resources
 {
-    public class EntryPoint
+    public class Restfulie
     {
         private string entryPointURI = "";
         public EntryPointService EntryPointService { get; set; }
 
-        public EntryPoint()
+        private Restfulie(string uri)
         {
             this.EntryPointService = new EntryPointService() { RemoteResourceService = new HttpRemoteResourceService() };
+            this.entryPointURI = uri;
         }
 
-        public EntryPoint At(string uri)
+        public static Restfulie At(string uri)
         {
-            this.entryPointURI = uri;
-            return this;
+            Restfulie entryPoint = new Restfulie(uri);
+            return entryPoint;
+        }
+
+        public static Restfulie At(string uri, EntryPointService service)
+        {
+            Restfulie entryPoint = new Restfulie(uri);
+            return entryPoint;
         }
 
         public dynamic Get()
