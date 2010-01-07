@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestfulieClient", "RestfulieClient\RestfulieClient.csproj", "{9C873FC6-81A7-432C-8541-7B18AE014209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestfulieClientTests", "RestfuliClientTests\RestfulieClientTests.csproj", "{AD6766CF-FA52-4AB5-B3A4-81BD55BC92B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestfulieClientTests", "RestfulieClientTests\RestfulieClientTests.csproj", "{AD6766CF-FA52-4AB5-B3A4-81BD55BC92B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{05E7983E-C6BC-4934-893F-7E4E862E19ED}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		RestfulieClient.vsmdi = RestfulieClient.vsmdi
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication1", "..\WindowsFormsApplication1\WindowsFormsApplication1\WindowsFormsApplication1.csproj", "{605B4980-059F-4D8D-A7A9-378800954164}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
