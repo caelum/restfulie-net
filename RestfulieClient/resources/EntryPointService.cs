@@ -13,9 +13,8 @@ namespace RestfulieClient.resources
 
         public dynamic FromXml(string uri)
         {
-            HttpRemoteResourceResponse response = (HttpRemoteResourceResponse)this.RemoteResourceService.GetResourceFromXml(uri); 
-            XElement element = XElement.Parse(response.XmlRepresentation);
-            return new DynamicXmlResource(element) {  remoteResourceService = RemoteResourceService, WebResponse = response.WebResponse};
+            HttpRemoteResponse response = (HttpRemoteResponse)this.RemoteResourceService.GetResourceFromXml(uri);
+            return new DynamicXmlResource(response);
         }
     }
 }

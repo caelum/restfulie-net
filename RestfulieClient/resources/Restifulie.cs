@@ -8,7 +8,7 @@ namespace RestfulieClient.resources
     public class Restfulie
     {
         private string entryPointURI = "";
-        public EntryPointService EntryPointService { get; set; }
+        public EntryPointService EntryPointService { get; private set; }
 
         private Restfulie(string uri)
         {

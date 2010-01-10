@@ -12,7 +12,7 @@ namespace RestfulieClient.resources
     {
         private RestfulieHttpVerbDiscovery httpVerbDiscovery = new RestfulieHttpVerbDiscovery();
         
-        public object Execute(string uri,string transitionName)
+        public object Execute(string uri, string transitionName)
         {
             string httpVerb = httpVerbDiscovery.GetHttpVerbByTransitionName(transitionName);
             return InvokeRemoteUri(uri, httpVerb);
@@ -20,7 +20,7 @@ namespace RestfulieClient.resources
 
         public object GetResourceFromXml(string uri)
         {
-            return ((HttpRemoteResourceResponse)this.InvokeRemoteUri(uri, "get"));
+            return ((HttpRemoteResponse)this.InvokeRemoteUri(uri, "get"));
         }        
 
         private object InvokeRemoteUri(string uri, string httpVerb)
@@ -30,12 +30,7 @@ namespace RestfulieClient.resources
             {
                 request.Method = httpVerb;
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());                
-                string xml = reader.ReadToEnd();
-                return new HttpRemoteResourceResponse() { XmlRepresentation = xml, WebResponse = response };
-                //response.StatusDescription;
-                //return xml;
-
+                return HttpRemoteResponseFactory.GetRemoteResponse(response);
             }
             catch (Exception ex)
             {
