@@ -17,7 +17,7 @@ namespace RestfulieClient.service
                 GetContentFromStream(webResponse.GetResponseStream()));
 
             webResponse.Close();
-            return response;
+            return response; 
         }
 
         private static String GetContentFromStream(Stream ResponseStream)
