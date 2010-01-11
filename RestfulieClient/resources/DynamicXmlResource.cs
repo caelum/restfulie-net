@@ -35,7 +35,6 @@ namespace RestfulieClient.resources
             XElement firstElement = this.GetFirstElementWithName(fieldName);
             result = this.GetValueFromXmlElement(firstElement);
             return result != null ? true : false;
-
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)

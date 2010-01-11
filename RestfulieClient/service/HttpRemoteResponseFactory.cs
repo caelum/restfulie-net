@@ -36,7 +36,7 @@ namespace RestfulieClient.service
                 string key = headers.GetKey(i).Replace("-", " ").ToUpper();
                 key = Regex.Replace(key, pattern, "");
                 string value = headers.Get(headers.GetKey(i));
-                System.Console.WriteLine("Key => " + key + " Value => " + value);
+                //System.Console.WriteLine("Key => " + key + " Value => " + value);
                 dictionary.Add(key, value);
             }
             return dictionary;
