@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace RestfulieClient.service
 {
-    class HttpRemoteResponseFactory
+    public class HttpRemoteResponseFactory
     {
         public static HttpRemoteResponse GetRemoteResponse(HttpWebResponse webResponse)
         {
-            HttpRemoteResponse response = new HttpRemoteResponse(webResponse.StatusCode, 
-                GetHeadersDictionaryFrom(webResponse.Headers), 
+            HttpRemoteResponse response = new HttpRemoteResponse(webResponse.StatusCode,
+                GetHeadersDictionaryFrom(webResponse.Headers),
                 GetContentFromStream(webResponse.GetResponseStream()));
-           
+
             webResponse.Close();
             return response;
         }
@@ -28,10 +29,15 @@ namespace RestfulieClient.service
 
         private static Dictionary<string, string> GetHeadersDictionaryFrom(WebHeaderCollection headers)
         {
-            Dictionary<string,string> dictionary = new Dictionary<string,string>();
-            foreach( KeyValuePair<string,string> kvp in headers ){
-                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                dictionary.Add(kvp.Key.Replace("-","").ToUpper(), kvp.Value);
+            string pattern = "\\s+";
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            for (int i = 0; i < headers.Keys.Count; i++)
+            {
+                string key = headers.GetKey(i).Replace("-", " ").ToUpper();
+                key = Regex.Replace(key, pattern, "");
+                string value = headers.Get(headers.GetKey(i));
+                System.Console.WriteLine("Key => " + key + " Value => " + value);
+                dictionary.Add(key, value);
             }
             return dictionary;
         }

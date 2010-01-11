@@ -13,44 +13,52 @@ namespace RestfulieClient.resources
 {
     public class DynamicXmlResource : DynamicObject
     {
-        private const string WEB_RESPONSE_PROPERTY = "WebResponse";
         public HttpRemoteResponse WebResponse { get; private set; }
         public IRemoteResourceService remoteResourceService { get; private set; }
-        private XElement XmlRepresentation { get { return XElement.Parse(WebResponse.Content); } }
+        public XElement XmlRepresentation { get; private set; }
 
         public DynamicXmlResource(HttpRemoteResponse response)
         {
             this.WebResponse = response;
+            this.XmlRepresentation = XElement.Parse(response.Content);
+        }
+
+        public DynamicXmlResource(HttpRemoteResponse response, IRemoteResourceService remoteService)
+            : this(response)
+        {
+            this.remoteResourceService = remoteService;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (!binder.Name.Equals(WEB_RESPONSE_PROPERTY))
-            {
-                XElement firstElement = this.GetFirstElementWithName(binder.Name);
-                result = this.GetValueFromXmlElement(firstElement);
-                return result != null ? true : false;
-            }
-            else
-            {
-                result = this.WebResponse;
-                return true;
-            }
-        }        
+            string fieldName = binder.Name.Replace("_", "-").ToLower();
+            XElement firstElement = this.GetFirstElementWithName(fieldName);
+            result = this.GetValueFromXmlElement(firstElement);
+            return result != null ? true : false;
+
+        }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            object value = this.GetValueFromAttributeName(binder.Name,"href");
+            object value = this.GetValueFromAttributeName(binder.Name, "href");
             if (value == null)
                 throw new ArgumentException(string.Format("There is not method defined with name:", binder.Name));
-            
-            object response = this.InvokeRemoteResource(value.ToString(),binder.Name);
-            result = this.XmlRepresentation;
-            //this.UpdateWebResponse(((HttpRemoteResponse)response).WebResponse);
+
+            HttpRemoteResponse response = (HttpRemoteResponse)this.InvokeRemoteResource(value.ToString(), binder.Name);
+
+            if (response.HasNoContent())
+            {
+                result = this.XmlRepresentation;
+                this.UpdateWebResponse(response);
+            }
+            else
+            {
+                result = new DynamicXmlResource(response);
+            }
             return result != null ? true : false;
         }
 
-        private object InvokeRemoteResource(string url, string  transitionName)
+        private object InvokeRemoteResource(string url, string transitionName)
         {
             try
             {
@@ -65,7 +73,7 @@ namespace RestfulieClient.resources
             {
                 throw new ArgumentException(string.Format("Error invoke remote resource method {0}.", ex.Message));
             }
-        }        
+        }
 
         private object GetValueFromXmlElement(XElement element)
         {
@@ -84,17 +92,17 @@ namespace RestfulieClient.resources
         }
 
         private XElement GetFirstElementWithName(string name)
-        {           
-            XElement firstElement = XmlRepresentation.Descendants(name).FirstOrDefault();            
+        {
+            XElement firstElement = XmlRepresentation.Descendants(name).FirstOrDefault();
             return firstElement;
         }
 
-        private object GetValueFromAttributeName(string name,string attributeName)
+        private object GetValueFromAttributeName(string name, string attributeName)
         {
-             foreach (XElement element in XmlRepresentation.Elements())
+            foreach (XElement element in XmlRepresentation.Elements())
             {
                 XAttribute attribute = element.Attributes().Where(attr => attr.Name == "rel").SingleOrDefault();
-                if ((attribute != null) && (attribute.Value.Equals(name,StringComparison.CurrentCultureIgnoreCase)))
+                if ((attribute != null) && (attribute.Value.Equals(name, StringComparison.CurrentCultureIgnoreCase)))
                 {
                     XAttribute attrib = element.Attributes().Where(attr => attr.Name == attributeName).SingleOrDefault();
                     return attrib.Value;
@@ -103,9 +111,9 @@ namespace RestfulieClient.resources
             return null;
         }
 
-        private void UpdateWebResponse(HttpWebResponse webResponse)
+        private void UpdateWebResponse(HttpRemoteResponse response)
         {
-            //this.WebResponse = webResponse;
+            this.WebResponse = response;
         }
 
 

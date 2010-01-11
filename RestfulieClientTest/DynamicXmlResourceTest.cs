@@ -7,6 +7,8 @@ using RestfulieClientTests.helpers;
 using System.Xml.Linq;
 using Rhino.Mocks;
 using RestfulieClient.resources;
+using RestfulieClient.service;
+using System.Net;
 
 namespace RestfulieClientTests
 {
@@ -65,27 +67,24 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToLoadAXmlByTheyDynamicObject()
         {
-            string xml = new LoadDocument().GetDocumentContent("order.xml");
-            XElement element = XElement.Parse(xml);
-
-            dynamic order = new DynamicXmlResource(element);            
+            dynamic order = this.GetDynamicResourceWithServiceFake();
             Assert.IsNotNull(order.date, "the attribute date is no expected");
-            Assert.IsNotNull(order.total, "the attribute total is no expected");        
+            Assert.IsNotNull(order.total, "the attribute total is no expected");
         }
 
-        [TestMethod ]
+        [TestMethod]
         public void ShouldBePossibleToExecuteDynamicMethodsInResource()
         {
-            dynamic order = this.GetDynamicResourceWithServiceFake(); 
+            dynamic order = this.GetDynamicResourceWithServiceFake();
             Assert.IsNotNull(order.Pay());
         }
-        
+
 
         [Ignore]
         public void ShouldBeAbleToAnswerToMethodRelName()
         {
             dynamic order = this.GetDynamicResourceWithServiceFake();
-            Assert.IsNotNull(order.Update());           
+            Assert.IsNotNull(order.Update());
 
         }
 
@@ -96,6 +95,20 @@ namespace RestfulieClientTests
             Assert.IsNotNull(order.Pay());
         }
 
+        [TestMethod]
+        public void ShouldBePossibleToAccessResponseHeadersEasily()
+        {
+            dynamic order = this.GetDynamicResourceWithServiceFake();
+            Assert.AreEqual("application-xml", order.WebResponse.ContentType);
+        }
+
+        [TestMethod]
+        public void ShouldBePossibleToAccessFieldsLikeUpdateAt()
+        {
+            dynamic order = this.GetDynamicResourceWithServiceFake();
+            Assert.AreEqual("01/01/2010", order.Update_At);
+        }
+
 
         private DynamicXmlResource GetDynamicResourceWithServiceFake()
         {
@@ -103,9 +116,16 @@ namespace RestfulieClientTests
             IRemoteResourceService remoteService;
             string xml = new LoadDocument().GetDocumentContent("order.xml");
             element = XElement.Parse(xml);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("CONTENTTYPE", "application-xml");
+            headers.Add("LASTMODIFIED", "teste");
+
+            HttpRemoteResponse response = new HttpRemoteResponse(HttpStatusCode.OK, headers, xml);
+
             remoteService = this.GetRemoteServiceFake();
-            return new DynamicXmlResource(element) { remoteResourceService = remoteService };
+            return new DynamicXmlResource(response, remoteService);
         }
+
 
         private IRemoteResourceService GetRemoteServiceFake()
         {

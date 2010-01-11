@@ -20,7 +20,7 @@ namespace RestfulieClient.service
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            string headerValue;
+            string headerValue = "";
             if (Headers.TryGetValue(binder.Name.ToUpper(), out headerValue))
             {
                 result = headerValue;
@@ -33,7 +33,10 @@ namespace RestfulieClient.service
             }
         }
 
-
+        public bool HasNoContent()
+        {
+            return Content.Equals("");
+        }
     }
 }
 
