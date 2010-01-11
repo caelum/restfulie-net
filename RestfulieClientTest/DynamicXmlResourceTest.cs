@@ -99,7 +99,8 @@ namespace RestfulieClientTests
         public void ShouldBePossibleToAccessResponseHeadersEasily()
         {
             dynamic order = this.GetDynamicResourceWithServiceFake();
-            Assert.AreEqual("application-xml", order.WebResponse.ContentType);
+            Assert.AreEqual("application/xml", order.WebResponse.ContentType);
+            Assert.AreEqual("keep-alive", order.WebResponse.Connection);
         }
 
         [TestMethod]
@@ -117,9 +118,15 @@ namespace RestfulieClientTests
             string xml = new LoadDocument().GetDocumentContent("order.xml");
             element = XElement.Parse(xml);
             Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("CONTENTTYPE", "application-xml");
-            headers.Add("LASTMODIFIED", "teste");
-
+            headers.Add("XRUNTIME", "29");
+            headers.Add("CONNECTION", "keep-alive");
+            headers.Add("CONTENTTYPE", "application/xml");
+            headers.Add("CACHECONTROL", "private, max-age=0, must-revalidate");
+            headers.Add("DATE", "Mon, 11 Jan 2010 22:39:24 GMT");
+            headers.Add("ETAG", "40edb82345bbb4d257708270c4cd8f76");
+            headers.Add("LASTMODIFIED", "Tue, 05 Jan 2010 02:44:25 GMT");
+            headers.Add("SERVER", "nginx/0.6.39");
+            headers.Add("VIA", "1.1 varnish");
             HttpRemoteResponse response = new HttpRemoteResponse(HttpStatusCode.OK, headers, xml);
 
             remoteService = this.GetRemoteServiceFake();
