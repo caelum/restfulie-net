@@ -67,7 +67,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToLoadAXmlByTheyDynamicObject()
         {
-            dynamic order = this.GetDynamicResourceWithServiceFake();
+            dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.date, "the attribute date is no expected");
             Assert.IsNotNull(order.total, "the attribute total is no expected");
         }
@@ -75,7 +75,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToExecuteDynamicMethodsInResource()
         {
-            dynamic order = this.GetDynamicResourceWithServiceFake();
+            dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.Pay());
         }
 
@@ -83,7 +83,7 @@ namespace RestfulieClientTests
         [Ignore]
         public void ShouldBeAbleToAnswerToMethodRelName()
         {
-            dynamic order = this.GetDynamicResourceWithServiceFake();
+            dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.Update());
 
         }
@@ -91,14 +91,14 @@ namespace RestfulieClientTests
         [TestMethod]
         public void LearningToReadAAtomLinkInXml()
         {
-            dynamic order = this.GetDynamicResourceWithServiceFake();
+            dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.Pay());
         }
 
         [TestMethod]
         public void ShouldBePossibleToAccessResponseHeadersEasily()
         {
-            dynamic order = this.GetDynamicResourceWithServiceFake();
+            dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
             Assert.AreEqual("application/xml", order.WebResponse.ContentType);
             Assert.AreEqual("keep-alive", order.WebResponse.Connection);
         }
@@ -106,16 +106,34 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToAccessFieldsLikeUpdateAt()
         {
-            dynamic order = this.GetDynamicResourceWithServiceFake();
+            dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
             Assert.AreEqual("01/01/2010", order.Update_At);
         }
 
+        [TestMethod]
+        public void ShouldBePossibleToAccessInnerFieldsInAResource()
+        {
+            dynamic city = this.GetDynamicResourceWithServiceFake("city.xml");
+            Assert.AreEqual("18000000", city.Population.Size);
+            Assert.AreEqual("10", city.Growth);
+        }
 
-        private DynamicXmlResource GetDynamicResourceWithServiceFake()
+        [TestMethod]
+        public void ShouldBePossibleToAccessAOtherResourceByLink()
+        {
+            dynamic city = this.GetDynamicResourceWithServiceFake("city.xml");
+            dynamic otherCity = city.Next_Largest();
+            Assert.IsNotNull(otherCity);
+            Assert.AreEqual("Sao Paulo", otherCity.Name);
+            
+        }
+
+
+        private DynamicXmlResource GetDynamicResourceWithServiceFake(string fileName)
         {
             XElement element;
             IRemoteResourceService remoteService;
-            string xml = new LoadDocument().GetDocumentContent("order.xml");
+            string xml = new LoadDocument().GetDocumentContent(fileName);
             element = XElement.Parse(xml);
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("XRUNTIME", "29");
@@ -129,14 +147,14 @@ namespace RestfulieClientTests
             headers.Add("VIA", "1.1 varnish");
             HttpRemoteResponse response = new HttpRemoteResponse(HttpStatusCode.OK, headers, xml);
 
-            remoteService = this.GetRemoteServiceFake();
+            remoteService = this.GetRemoteServiceFake(fileName);
             return new DynamicXmlResource(response, remoteService);
         }
 
 
-        private IRemoteResourceService GetRemoteServiceFake()
+        private IRemoteResourceService GetRemoteServiceFake(string fileName)
         {
-            return RemoteResourceFactory.GetRemoteResource();
+            return RemoteResourceFactory.GetRemoteResource(fileName);
         }
     }
 }

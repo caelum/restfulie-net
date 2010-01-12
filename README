@@ -15,8 +15,7 @@ Restfulie C#: client-side
 
 Example on accessing a resource and its services through the restfulie C# API:
 
-EntryPoint entryPoint= new EntryPoint();
-dynamic order = entryPoint.At("http://www.caelum.com.br/orders/3.xml").Get();    
+dynamic order = Restfulie.At("http://www.caelum.com.br/orders/3.xml").Get();    
 Console.WriteLine(order.product) ;
 
 Executing a state transition:
@@ -29,4 +28,4 @@ Console.WriteLine(order.WebResponse.StatusCode);
  
  Following some limitations:
   - it does not update resource on server
-  - it does not supports the method names with the characteres (-,?,!), very common in ruby codes.
+

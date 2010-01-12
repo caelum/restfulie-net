@@ -28,7 +28,7 @@ namespace RestfulieClient.resources
             WebRequest request = WebRequest.Create(uri);
             try
             {
-                request.Method = httpVerb;
+                request.Method = httpVerb;                    
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 return HttpRemoteResponseFactory.GetRemoteResponse(response);
             }

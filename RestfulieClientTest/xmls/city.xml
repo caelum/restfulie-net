@@ -1,0 +1,10 @@
+﻿<city>
+  <name>Sao Paulo</name>
+  <population>
+    <size>18000000</size>
+    <growth>10</growth>
+  </population>
+  <updated-at>10/01/2010</updated-at>
+  <link rel="next_largest" href="http://localhost:3000/cities/18.xml" />
+</city>
+
