@@ -1,9 +1,27 @@
-TestResults/
+*.dep 
+*.aps 
+*.vbw 
+*.suo 
+*.obj 
+*.ncb 
+*.plg 
+*.bsc 
+*.ilk  
+*.exp 
+*.sbr 
+*.opt 
+*.pdb 
+*.idb 
+*.pch 
+*.res 
+*.user 
 
-bin/
-obj/
+*\obj  
+*\bin 
+*\Debug 
+*\Release 
 
+./Resharp*
 _ReSharper.*/
-
-*.suo
-*.user
+Thumbs.db
+*.exe
