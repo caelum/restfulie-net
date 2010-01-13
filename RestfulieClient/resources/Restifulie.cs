@@ -2,45 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RestfulieClient.service;
+using System.Dynamic;
 
 namespace RestfulieClient.resources
 {
-    public class Restfulie
+    public class Restfulie : DynamicObject
     {
-        private string entryPointURI = "";
         public EntryPointService EntryPointService { get; private set; }
+
+        private Restfulie(EntryPointService service)
+        {
+            this.EntryPointService = service;
+        }
 
         private Restfulie(string uri)
         {
-            this.EntryPointService = new EntryPointService() { RemoteResourceService = new HttpRemoteResourceService() };
-            this.entryPointURI = uri;
+            this.EntryPointService = new EntryPointService(uri, new HttpRemoteResourceService());
         }
 
-        private Restfulie(string uri, EntryPointService service)
-        {
-            this.EntryPointService = service;
-            this.entryPointURI = uri;
-        }
-
-        public static Restfulie At(string uri)
+        public static dynamic At(string uri)
         {
             Restfulie entryPoint = new Restfulie(uri);
-            return entryPoint;
+            return entryPoint.EntryPointService;
         }
 
-        public static Restfulie At(string uri, EntryPointService service)
+        public static dynamic At(EntryPointService service)
         {
-            Restfulie entryPoint = new Restfulie(uri,service);
-            return entryPoint;
+            Restfulie entryPoint = new Restfulie(service);
+            return entryPoint.EntryPointService;
         }
-
-        public dynamic Get()
-        {
-            if (string.IsNullOrEmpty(this.entryPointURI))
-                throw new ArgumentNullException("There is no uri defined. Use the At() method for to define the uri.");
-            return this.EntryPointService.FromXml(this.entryPointURI);
-        }
-        
-
     }
 }
