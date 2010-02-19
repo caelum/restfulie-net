@@ -10,5 +10,7 @@ namespace RestfulieClient.resources
         object Execute(string uri, string transitionName);
         object GetResourceFromWeb(string uri);
         dynamic Get();
+
+        dynamic Create(string content);
     } 
 }

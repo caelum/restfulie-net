@@ -104,6 +104,15 @@ namespace RestfulieClientTests
             Assert.IsNotNull(order.WebResponse.StatusCode);
         }
 
+        [TestMethod]
+        public void ShouldBePossibleToPostSomeContent()
+        {
+            string content = "<order><date>19/02/2010</date><total>55.00</total></order>";
+            dynamic newOrder = Restfulie.At(GetEntryPointServiceForTests("http:\\localhost:3000\\orders")).Create(content);
+            Assert.IsNotNull(newOrder);
+            Assert.AreEqual("55.00",newOrder.total);
+        }
+
         private IRemoteResourceService GetEntryPointServiceForTests(string uri)
         {
             return RemoteResourceFactory.GetRemoteResource(uri);

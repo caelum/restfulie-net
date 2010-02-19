@@ -95,6 +95,7 @@ namespace RestfulieClient.resources
             return null;
         }
 
+      
         private XElement GetFirstElementWithName(string name)
         {
             XElement firstElement = XmlRepresentation.Descendants(name).FirstOrDefault();

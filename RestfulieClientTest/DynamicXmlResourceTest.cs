@@ -107,6 +107,7 @@ namespace RestfulieClientTests
         public void ShouldBePossibleToAccessFieldsLikeUpdateAt()
         {
             dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
+            //DateTime date = new DateTime(2010, 01, 01);
             Assert.AreEqual("01/01/2010", order.Update_At);
         }
 
@@ -118,6 +119,7 @@ namespace RestfulieClientTests
             Assert.AreEqual("10", city.Growth);
         }
 
+       
         [TestMethod]
         public void ShouldBePossibleToAccessAOtherResourceByLink()
         {
