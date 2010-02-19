@@ -38,7 +38,7 @@ namespace RestfulieClient.resources
             //todo - criar um enum para MediaType
             if (response.ContentType.Equals("application/xml"))
             {
-                return new DynamicXmlResource(response, this);
+                return new DynamicXmlResource(response, this); 
             }
             else
             {
