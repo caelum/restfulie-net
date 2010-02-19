@@ -1,10 +1,10 @@
 ﻿<city>
-  <name>Sao Paulo</name>
+  <name>Rio de Janeiro</name>
   <population>
     <size>18000000</size>
     <growth>10</growth>
   </population>
   <updated-at>10/01/2010</updated-at>
-  <link rel="next_largest" href="othercity.xml" />
+  <link rel="next_largest" href="city.xml" />
 </city>
 
