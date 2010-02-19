@@ -15,15 +15,19 @@ namespace RestfulieClientTests.helpers
 
         public string GetDocumentContent(string fileName)
         {
-            string filePath = "RestfulieClientTests.xmls." + fileName;  
-            Stream fileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath);  
-            XmlDocument data =null;
+            string filePath = "RestfulieClientTests.xmls." + fileName;
+            Stream fileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath);
+            XmlDocument data = null;
             if (fileStream != null)
             {
-                 data = new XmlDocument();  
-                 data.Load(fileStream);                      
+                data = new XmlDocument();
+                data.Load(fileStream);
+                if (data.InnerXml != null)
+                    return data.InnerXml;
+                else 
+                    return "";
             }
-            return data.InnerXml;
+            else return "";
         }
     }
 }

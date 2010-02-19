@@ -51,6 +51,11 @@
     <Compile Include="helpers\LoadDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="helpers\RemoteResourceFactory.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ResourceServiceTest.cs" />
     <Compile Include="RestfulieHttpVerbDiscoveryTest.cs" />
   </ItemGroup>
@@ -61,11 +66,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="xmls\city.xml" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="xmls\order.xml" />
     <EmbeddedResource Include="xmls\orderWithoutAtomLinks.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="xmls\othercity.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="xmls\city.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

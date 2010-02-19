@@ -7,27 +7,27 @@ using System.Dynamic;
 
 namespace RestfulieClient.resources
 {
-    public class Restfulie : DynamicObject
+    public class Restfulie
     {
-        public EntryPointService EntryPointService { get; private set; }
+        public IRemoteResourceService EntryPointService { get; private set; }
 
-        private Restfulie(EntryPointService service)
+        private Restfulie(IRemoteResourceService service)
         {
             this.EntryPointService = service;
         }
 
         private Restfulie(string uri)
         {
-            this.EntryPointService = new EntryPointService(uri, new HttpRemoteResourceService());
+            this.EntryPointService = new EntryPointService(uri);
         }
 
-        public static dynamic At(string uri)
+        public static IRemoteResourceService At(string uri)
         {
             Restfulie entryPoint = new Restfulie(uri);
             return entryPoint.EntryPointService;
         }
 
-        public static dynamic At(EntryPointService service)
+        public static IRemoteResourceService At(IRemoteResourceService service)
         {
             Restfulie entryPoint = new Restfulie(service);
             return entryPoint.EntryPointService;

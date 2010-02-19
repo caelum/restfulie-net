@@ -7,29 +7,59 @@ using Rhino.Mocks;
 using RestfulieClientTests.helpers;
 using RestfulieClient.service;
 using System.Net;
+using System.Dynamic;
 
 namespace RestfulieClientTests.helpers
 {
     public class RemoteResourceFactory
     {
 
-        public static IRemoteResourceService GetRemoteResource(string fileNameOfXml = "order.xml")
+        public static IRemoteResourceService GetRemoteResource(string fileName)
         {
-            MockRepository mocks = new MockRepository();
-            IRemoteResourceService remoteResourceService = mocks.DynamicMock<IRemoteResourceService>();
-            HttpWebResponse response = mocks.DynamicMock<HttpWebResponse>();
-            Expect.Call(remoteResourceService.Execute("", "")).IgnoreArguments().Repeat.Any().Return(GetHttpRemoteResponseFake(fileNameOfXml));
-            Expect.Call(remoteResourceService.GetResourceFromXml("")).IgnoreArguments().Repeat.Any().Return(GetHttpRemoteResponseFake() );
-            Expect.Call(response.StatusCode).Repeat.Any().Return(HttpStatusCode.OK);
-            mocks.ReplayAll();
-            return remoteResourceService;
+            return new RemoteResourceMock(fileName);
         }
 
-        private static HttpRemoteResponse GetHttpRemoteResponseFake(string fileName = "order.xml")
+        public class RemoteResourceMock : IRemoteResourceService
         {
-            HttpRemoteResponse response = new HttpRemoteResponse(HttpStatusCode.OK,
-                new Dictionary<string, string>(), new LoadDocument().GetDocumentContent(fileName));
-            return response;
+            private string fileName;
+
+            public RemoteResourceMock(string fileName){
+                this.fileName = fileName;
+            }
+ 
+            public object Execute(string uri, string transitionName)
+            {
+                return GetMediaTypeXMLResponse(uri);
+            }
+
+            public object GetResourceFromWeb(string uri)
+            {
+                return GetMediaTypeXMLResponse(uri);
+            }
+
+            public dynamic Get()
+            {
+                if (this.fileName == null || this.fileName.Equals(""))
+                    throw new ArgumentNullException();
+                else
+                    return GetMediaTypeXMLResponse(fileName);
+            }
+
+            private static DynamicXmlResource GetMediaTypeXMLResponse(string uri)
+            {
+                return new DynamicXmlResource(GetHttpRemoteResponseFake(uri));
+            }
+
+            private static HttpRemoteResponse GetHttpRemoteResponseFake(string fileName)
+            {
+                string content = "";
+                if (fileName != "" && fileName != "")
+                    content = new LoadDocument().GetDocumentContent(fileName);
+
+                HttpRemoteResponse response = new HttpRemoteResponse(HttpStatusCode.OK,
+                    new Dictionary<string, string>(), content);
+                return response;
+            }
         }
     }
 }

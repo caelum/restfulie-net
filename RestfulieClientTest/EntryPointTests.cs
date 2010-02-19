@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestfulieClient.resources;
 using RestfulieClientTests.helpers;
@@ -64,7 +61,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToGetAResourceRepresentationByTheEntryFluentInteface()
         {
-            dynamic order = Restfulie.At(GetEntryPointServiceForTests("http:\\localhost:3000\\order\\1.xml")).Get();
+            dynamic order = Restfulie.At(GetEntryPointServiceForTests("order.xml")).Get();
             Assert.IsNotNull(order);
             Assert.IsNotNull(order.date, "the attribute date is no expected");
             Assert.IsNotNull(order.total, "the attribute total is no expected");
@@ -73,7 +70,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleDefineConfigurationOfEntryPointService()
         {
-            dynamic entryPointService = Restfulie.At(GetEntryPointServiceForTests("http:\\localhost:3000\\order\\1.xml"));
+            dynamic entryPointService = Restfulie.At(GetEntryPointServiceForTests("order.xml"));
             Assert.IsNotNull(entryPointService);
         }
 
@@ -88,14 +85,15 @@ namespace RestfulieClientTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ShouldBeThrowAnErrorIfTheInvokeGetMethodWithoutUriDefined()
         {
-            dynamic entryPointService = Restfulie.At(GetEntryPointServiceForTests(""));
+            IRemoteResourceService entryPointService = Restfulie.At(GetEntryPointServiceForTests(""));
             dynamic order = entryPointService.Get();
         }
 
         [TestMethod]
         public void ShoudBePossibleToGetAWebReponse()
         {
-            dynamic order = Restfulie.At(GetEntryPointServiceForTests("http:\\localhost:3000\\order\\1.xml")).Get();
+            IRemoteResourceService serviceMock = GetEntryPointServiceForTests("http:\\localhost:3000\\order\\1.xml");
+            dynamic order = Restfulie.At(serviceMock).Get();
             Assert.IsNotNull(order.WebResponse);
         }
 
@@ -106,9 +104,9 @@ namespace RestfulieClientTests
             Assert.IsNotNull(order.WebResponse.StatusCode);
         }
 
-        private EntryPointService GetEntryPointServiceForTests(string uri)
+        private IRemoteResourceService GetEntryPointServiceForTests(string uri)
         {
-            return new EntryPointService(uri, RemoteResourceFactory.GetRemoteResource());
+            return RemoteResourceFactory.GetRemoteResource(uri);
         }
     }
 }

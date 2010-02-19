@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using System.Dynamic;
-using RestfulieClient.resources;
 using System.Reflection;
 using RestfulieClient.service;
-using System.Net;
 
 namespace RestfulieClient.resources
 {
@@ -15,12 +11,21 @@ namespace RestfulieClient.resources
     {
         public HttpRemoteResponse WebResponse { get; private set; }
         public IRemoteResourceService remoteResourceService { get; private set; }
-        public XElement XmlRepresentation { get; private set; }
+        public XElement XmlRepresentation
+        {
+            get
+            {
+                if (this.WebResponse.HasNoContent())
+                    return null;
+                else
+                    return XElement.Parse(this.WebResponse.Content);
+            }
+
+        }
 
         public DynamicXmlResource(HttpRemoteResponse response)
         {
             this.WebResponse = response;
-            this.XmlRepresentation = XElement.Parse(response.Content);
         }
 
         public DynamicXmlResource(HttpRemoteResponse response, IRemoteResourceService remoteService)
@@ -43,16 +48,16 @@ namespace RestfulieClient.resources
             if (value == null)
                 throw new ArgumentException(string.Format("There is not method defined with name:", binder.Name));
 
-            HttpRemoteResponse response = (HttpRemoteResponse)this.InvokeRemoteResource(value.ToString(), binder.Name);
+            DynamicXmlResource resource = (DynamicXmlResource)this.InvokeRemoteResource(value.ToString(), binder.Name);
 
-            if (response.HasNoContent())
+            if (resource.WebResponse.HasNoContent())
             {
                 result = this.XmlRepresentation;
-                this.UpdateWebResponse(response);
+                this.UpdateWebResponse(resource.WebResponse);
             }
             else
             {
-                result = new DynamicXmlResource(response);
+                result = resource;
             }
             return result != null ? true : false;
         }
@@ -114,7 +119,5 @@ namespace RestfulieClient.resources
         {
             this.WebResponse = response;
         }
-
-
     }
 }

@@ -1,31 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
 using RestfulieClient.service;
 using System.Dynamic;
+using System.Net;
 
 namespace RestfulieClient.resources
 {
-    public class EntryPointService : DynamicObject
+    public class EntryPointService : IRemoteResourceService
     {
         private string entryPointURI = "";
-        private string contentType; 
-        private string accepts;
+        private string contentType;
+        private string accept;
 
-        public IRemoteResourceService RemoteResourceService { get; private set; }
+        private RestfulieHttpVerbDiscovery httpVerbDiscovery = new RestfulieHttpVerbDiscovery();
 
-        public EntryPointService(string uri, IRemoteResourceService remoteService)
+        public EntryPointService(string uri)
         {
             this.entryPointURI = uri;
-            this.RemoteResourceService = remoteService;
         }
 
         public dynamic As(string contentType)
         {
             this.contentType = contentType;
-            this.accepts = contentType;
+            this.accept = contentType;
             return this;
         }
 
@@ -38,8 +34,48 @@ namespace RestfulieClient.resources
 
         private dynamic FromXml(string uri)
         {
-            HttpRemoteResponse response = (HttpRemoteResponse)this.RemoteResourceService.GetResourceFromXml(uri);
-            return new DynamicXmlResource(response, this.RemoteResourceService);
+            dynamic response = this.GetResourceFromWeb(uri);
+            //todo - criar um enum para MediaType
+            if (response.ContentType.Equals("application/xml"))
+            {
+                return new DynamicXmlResource(response, this);
+            }
+            else
+            {
+                throw new InvalidOperationException("unsupported media type {0}", response.ContentType);
+            }
         }
+
+        public object Execute(string uri, string transitionName)
+        {
+            string httpVerb = httpVerbDiscovery.GetHttpVerbByTransitionName(transitionName);
+            return InvokeRemoteUri(uri, httpVerb);
+        }
+
+        public object GetResourceFromWeb(string uri)
+        {
+            return this.InvokeRemoteUri(uri, "get");
+        }
+
+        private object InvokeRemoteUri(string uri, string httpVerb)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            try
+            {
+                request.Method = httpVerb;
+                if (!accept.Equals(""))
+                {
+                    request.Accept = accept;
+                    request.ContentType = contentType;
+                }
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                return HttpRemoteResponseFactory.GetRemoteResponse(response);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(string.Format("An error occurred while connecting to the resource in url {0} with message {1}.", uri, ex.Message), ex);
+            }
+        }
+
     }
 }

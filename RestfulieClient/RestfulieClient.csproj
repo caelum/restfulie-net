@@ -46,7 +46,6 @@
     <Compile Include="resources\EntryPointService.cs" />
     <Compile Include="service\HttpRemoteResponseFactory.cs" />
     <Compile Include="service\HttpRemoteResponse.cs" />
-    <Compile Include="service\HttpRemoteResourceService.cs" />
     <Compile Include="service\IRemoteResourceService.cs" />
     <Compile Include="service\RestfulieHttpVerbDiscovery.cs" />
   </ItemGroup>

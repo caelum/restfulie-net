@@ -124,10 +124,9 @@ namespace RestfulieClientTests
             dynamic city = this.GetDynamicResourceWithServiceFake("city.xml");
             dynamic otherCity = city.Next_Largest();
             Assert.IsNotNull(otherCity);
-            Assert.AreEqual("Sao Paulo", otherCity.Name);
-            
+            Assert.AreEqual("Rio de Janeiro", otherCity.Name);
+            Assert.AreEqual("Sao Paulo", city.Name);
         }
-
 
         private DynamicXmlResource GetDynamicResourceWithServiceFake(string fileName)
         {

@@ -65,7 +65,7 @@ namespace RestfulieClientTests
         public void ShoudBePossibleToLoadAResourceFromXml()
         {        
          
-            EntryPointService resource = GetEntryPointServiceForTests("http:\\localhost:3000\\order\\1.xml");
+            IRemoteResourceService resource = GetEntryPointServiceForTests("order.xml");
             dynamic order = resource.Get();
 
             // verificando os atributos do recurso
@@ -76,15 +76,15 @@ namespace RestfulieClientTests
         [Ignore]
         public void ShouldBePossibleToExecuteATransitionOfStateOfAResource()
         {                  
-            EntryPointService resource = GetEntryPointServiceForTests("http:\\localhost:3000\\order\\1.xml");
+            EntryPointService resource = GetEntryPointServiceForTests("order.xml");
             dynamic order = resource.Get();
             Assert.IsNotNull(order.Pay());
 
         }
 
-        private EntryPointService GetEntryPointServiceForTests(string uri)
+        private dynamic GetEntryPointServiceForTests(string uri)
         {
-            return new EntryPointService(uri, RemoteResourceFactory.GetRemoteResource());
+            return RemoteResourceFactory.GetRemoteResource(uri);
         }
 
 
