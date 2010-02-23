@@ -4,13 +4,17 @@ using System.Xml.Linq;
 using System.Dynamic;
 using System.Reflection;
 using RestfulieClient.service;
+using System.Globalization;
 
 namespace RestfulieClient.resources
 {
     public class DynamicXmlResource : DynamicObject
     {
+        private StringValueConverter converter = new StringValueConverter();
+
         public HttpRemoteResponse WebResponse { get; private set; }
-        public IRemoteResourceService remoteResourceService { get; private set; }
+        public IRemoteResourceService RemoteResourceService { get; private set; }
+        public NumberFormatInfo NumberFormatInfo { get; set; }
         public XElement XmlRepresentation
         {
             get
@@ -20,18 +24,18 @@ namespace RestfulieClient.resources
                 else
                     return XElement.Parse(this.WebResponse.Content);
             }
-
         }
 
         public DynamicXmlResource(HttpRemoteResponse response)
         {
             this.WebResponse = response;
+            this.NumberFormatInfo = System.Globalization.NumberFormatInfo.CurrentInfo;
         }
 
         public DynamicXmlResource(HttpRemoteResponse response, IRemoteResourceService remoteService)
             : this(response)
         {
-            this.remoteResourceService = remoteService;
+            this.RemoteResourceService = remoteService;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -66,12 +70,12 @@ namespace RestfulieClient.resources
         {
             try
             {
-                Type remoteResourceServiceType = this.remoteResourceService.GetType();
+                Type remoteResourceServiceType = this.RemoteResourceService.GetType();
                 return remoteResourceServiceType.InvokeMember("Execute",
                                                                 BindingFlags.InvokeMethod |
                                                                 BindingFlags.Public |
                                                                 BindingFlags.Instance,
-                                                                null, this.remoteResourceService, new Object[] { url, transitionName });
+                                                                null, this.RemoteResourceService, new Object[] { url, transitionName });
             }
             catch (Exception ex)
             {
@@ -89,16 +93,17 @@ namespace RestfulieClient.resources
                 }
                 else
                 {
-                    return element.Value;
+                    object result = this.converter.TransformText(element.Value).WithNumberFormatInfo(this.NumberFormatInfo).ToValue();
+                    return result;
                 }
             }
             return null;
         }
 
-      
         private XElement GetFirstElementWithName(string name)
         {
             XElement firstElement = XmlRepresentation.Descendants(name).FirstOrDefault();
+
             return firstElement;
         }
 

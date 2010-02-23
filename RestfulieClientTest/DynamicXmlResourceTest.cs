@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestfulieClientTests.helpers;
 using System.Xml.Linq;
-using Rhino.Mocks;
 using RestfulieClient.resources;
 using RestfulieClient.service;
 using System.Net;
+using System.Globalization;
 
 namespace RestfulieClientTests
 {
@@ -107,19 +105,29 @@ namespace RestfulieClientTests
         public void ShouldBePossibleToAccessFieldsLikeUpdateAt()
         {
             dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
-            //DateTime date = new DateTime(2010, 01, 01);
-            Assert.AreEqual("01/01/2010", order.Update_At);
+            DateTime date = new DateTime(2010, 01, 01);
+            Assert.AreEqual(date, order.Update_At);
         }
 
         [TestMethod]
         public void ShouldBePossibleToAccessInnerFieldsInAResource()
         {
             dynamic city = this.GetDynamicResourceWithServiceFake("city.xml");
-            Assert.AreEqual("18000000", city.Population.Size);
-            Assert.AreEqual("10", city.Growth);
+            Assert.AreEqual(18000000, city.Population.Size);
+            Assert.AreEqual(10, city.Growth);
         }
 
-       
+        [TestMethod]
+        public void ShouldBePossibleToAccessInnerFieldsWithYourRealTypes()
+        {       
+            dynamic order = this.GetDynamicResourceWithServiceFake("order.xml");
+            order.NumberFormatInfo = new CultureInfo("en-US", false).NumberFormat;
+            Assert.AreEqual(15.00, order.Total);
+            Assert.AreEqual(1, order.Id);
+            Assert.AreEqual(new DateTime(2010, 01, 01), order.Update_At);
+            Assert.AreEqual("unpaid", order.status);
+        }
+
         [TestMethod]
         public void ShouldBePossibleToAccessAOtherResourceByLink()
         {

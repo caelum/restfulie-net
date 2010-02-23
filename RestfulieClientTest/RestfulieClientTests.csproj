@@ -42,6 +42,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -58,6 +60,7 @@
     </Compile>
     <Compile Include="ResourceServiceTest.cs" />
     <Compile Include="RestfulieHttpVerbDiscoveryTest.cs" />
+    <Compile Include="StringValueConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestfulieClient\RestfulieClient.csproj">
