@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Dynamic;
 using System.Net;
 using RestfulieClient.service;
 using System.Text;
 using System.IO;
+using System.Net.Mime;
 
 namespace RestfulieClient.resources
 {
@@ -27,31 +27,75 @@ namespace RestfulieClient.resources
             return this;
         }
 
+        public dynamic Accepts(string acceptType)
+        {
+            this.accepts = acceptType;
+            return this;
+        }
+
         public dynamic Get()
         {
             if (string.IsNullOrEmpty(this.entryPointURI))
                 throw new ArgumentNullException("There is no uri defined. Use the At() method for to define the uri.");
-            return this.FromXml(this.entryPointURI);
+            HttpWebResponse response = (HttpWebResponse)this.FromWeb(this.entryPointURI);
+            return ParseGetResponse(response);
         }
 
+        private dynamic ParseGetResponse(HttpWebResponse res)
+        {
+            dynamic response = HttpRemoteResponseFactory.GetRemoteResponse(res);
+            if (res.StatusCode == HttpStatusCode.OK)
+            {
+                return ParseGetOkResponse(res, response);
+            }
+            else
+                return response;
+        }
+
+        private dynamic ParseGetOkResponse(HttpWebResponse res, dynamic response)
+        {          
+            if (res.ContentType.Contains("application/xml"))
+            {
+                return new DynamicXmlResource(response, this);
+            }
+            else
+            {
+                throw new InvalidOperationException("unsupported media type: " + res.ContentType);
+            }
+        }
 
         public dynamic Create(string content)
         {
             return InvokeRemoteUri(this.entryPointURI, "post", content);
         }
 
-        private dynamic FromXml(string uri)
+        public dynamic ParsePostResponse(HttpWebResponse res, string content)
         {
-            dynamic response = this.GetResourceFromWeb(uri);
-            //todo - criar um enum para MediaType
-            if (response.ContentType.Equals("application/xml"))
+            dynamic response = HttpRemoteResponseFactory.GetRemoteResponse(res);
+            if (res.StatusCode == HttpStatusCode.OK)
             {
-                return new DynamicXmlResource(response, this);
+                this.accepts = "application/xml";                               
+                return FromWeb(response.Location);
             }
-            else
-            {
-                throw new InvalidOperationException("unsupported media type {0}", response.ContentType);
-            }
+            else 
+                return response;    
+        }
+        /*
+              def parse_post_response(response, content)
+                code = response.code
+                if code=="301" && @type.follows.moved_permanently? == :all
+                  remote_post_to(response["Location"], content)
+                elsif code=="201"
+                  from_web(response["Location"], "Accept" => "application/xml")
+                else
+                  response
+                end
+              end                      
+        */
+        private dynamic FromWeb(string uri)
+        {
+            WebResponse response = this.InvokeRemoteUri(uri, "get");
+            return response;
         }
 
         public object Execute(string uri, string transitionName)
@@ -60,13 +104,8 @@ namespace RestfulieClient.resources
             return InvokeRemoteUri(uri, httpVerb);
         }
 
-        public object GetResourceFromWeb(string uri)
-        {
-            return this.InvokeRemoteUri(uri, "get");
-        }
 
-
-        private object InvokeRemoteUri(string uri, string httpVerb, string content = "")
+        private HttpWebResponse InvokeRemoteUri(string uri, string httpVerb, string content = "")
         {
             Uri requestUri = new Uri(this.entryPointURI);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUri);
@@ -83,11 +122,10 @@ namespace RestfulieClient.resources
                     byte[] byteArray = Encoding.UTF8.GetBytes(content);
                     request.ContentLength = byteArray.Length;
                     Stream bodyStream = request.GetRequestStream();
-                    bodyStream.Write(byteArray, 0, byteArray.Length);    
+                    bodyStream.Write(byteArray, 0, byteArray.Length);
                     bodyStream.Close();
                 }
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                return HttpRemoteResponseFactory.GetRemoteResponse(response);
+                return (HttpWebResponse)request.GetResponse();
             }
             catch (Exception ex)
             {

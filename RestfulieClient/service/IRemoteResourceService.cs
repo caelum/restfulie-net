@@ -7,10 +7,9 @@ namespace RestfulieClient.resources
 {
     public interface IRemoteResourceService
     {
-        object Execute(string uri, string transitionName);
-        object GetResourceFromWeb(string uri);
+        object Execute(string uri, string transitionName);        
+        
         dynamic Get();
-
         dynamic Create(string content);
     } 
 }
