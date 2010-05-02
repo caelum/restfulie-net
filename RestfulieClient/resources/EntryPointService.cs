@@ -66,13 +66,14 @@ namespace RestfulieClient.resources
 
         public dynamic Create(string content)
         {
-            return InvokeRemoteUri(this.entryPointURI, "post", content);
+            HttpWebResponse postResponse = InvokeRemoteUri(this.entryPointURI, "post", content);
+            return ParsePostResponse(postResponse);
         }
 
-        public dynamic ParsePostResponse(HttpWebResponse res, string content)
+        public dynamic ParsePostResponse(HttpWebResponse postResponse)
         {
-            dynamic response = HttpRemoteResponseFactory.GetRemoteResponse(res);
-            if (res.StatusCode == HttpStatusCode.OK)
+            dynamic response = HttpRemoteResponseFactory.GetRemoteResponse(postResponse);
+            if (postResponse.StatusCode == HttpStatusCode.Created)
             {
                 this.accepts = "application/xml";                               
                 return FromWeb(response.Location);
@@ -86,7 +87,7 @@ namespace RestfulieClient.resources
                 if code=="301" && @type.follows.moved_permanently? == :all
                   remote_post_to(response["Location"], content)
                 elsif code=="201"
-                  from_web(response["Location"], "Accept" => "application/xml")
+                  from_web(response["Location"],    
                 else
                   response
                 end
