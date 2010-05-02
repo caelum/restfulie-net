@@ -81,18 +81,7 @@ namespace RestfulieClient.resources
             else 
                 return response;    
         }
-        /*
-              def parse_post_response(response, content)
-                code = response.code
-                if code=="301" && @type.follows.moved_permanently? == :all
-                  remote_post_to(response["Location"], content)
-                elsif code=="201"
-                  from_web(response["Location"],    
-                else
-                  response
-                end
-              end                      
-        */
+        
         private dynamic FromWeb(string uri)
         {
             WebResponse response = this.InvokeRemoteUri(uri, "get");
