@@ -48,7 +48,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseTest.cs" />
+    <Compile Include="helpers\TestHelper.cs" />
     <Compile Include="DynamicXmlResourceTest.cs" />
     <Compile Include="EntryPointServiceTests.cs" />
     <Compile Include="helpers\EmbeddedFileResourceDispatcher.cs" />

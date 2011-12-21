@@ -6,21 +6,18 @@ using Moq;
 using RestfulieClient.request;
 using RestfulieClient.resources;
 using RestfulieClient.service;
+using RestfulieClientTests.helpers;
 
 namespace RestfulieClientTests
 {
     [TestClass]
-    public class EntryPointServiceTests : BaseTest
+    public class EntryPointServiceTests
     {
-        private HttpRemoteResponse CreateResponse(HttpStatusCode code = HttpStatusCode.OK, Dictionary<string, string> headers = null, string content = "") {
-            return new HttpRemoteResponse(code, headers ?? new Dictionary<string, string>(), content);
-        }
-
         private IRemoteResourceService CreateService(HttpRemoteResponse response = null, IRequestDispatcher dispatcher = null) {
             if (response == null)
-                response = CreateResponse();
+                response = TestHelper.CreateResponse();
             if (dispatcher == null)
-                dispatcher = GetDispatcherFake(response).Object;
+                dispatcher = TestHelper.CreateDispatcher(response).Object;
 
             return new EntryPointService("file://NotImportant", dispatcher);
         }
@@ -62,22 +59,22 @@ namespace RestfulieClientTests
 
         [TestMethod]
         public void it_should_provide_dispatcher() {
-            var dispatcher = GetDispatcherFake(It.IsAny<HttpRemoteResponse>());
+            var dispatcher = TestHelper.CreateDispatcher(It.IsAny<HttpRemoteResponse>());
 
             Assert.AreEqual(dispatcher.Object, CreateService(dispatcher: dispatcher.Object).Dispatcher);
         }
 
         [TestMethod]
         public void it_should_be_possible_to_handle_error_status() {
-            var response = CreateResponse(HttpStatusCode.NotFound);
+            var response = TestHelper.CreateResponse(HttpStatusCode.NotFound);
 
             Assert.AreEqual(HttpStatusCode.NotFound, CreateService(response).Get().WebResponse.StatusCode);
         }
 
         [TestMethod]
         public void it_should_return_empty_for_no_content_regardless_of_content_type() {
-            var response = CreateResponse(headers: new Dictionary<string, string> { { "Content-Type", "application/xml" } });
-            var resource = CreateService().Get();
+            var response = TestHelper.CreateResponse(headers: new Dictionary<string, string> { { "Content-Type", "application/xml" } });
+            var resource = CreateService(response).Get();
 
             Assert.IsTrue(resource.IsEmpty);
             Assert.IsInstanceOfType(resource, typeof(EmptyResource));
@@ -85,7 +82,7 @@ namespace RestfulieClientTests
 
         [TestMethod]
         public void it_should_return_empty_for_no_content_type() {
-            var response = CreateResponse(content: "{ }");
+            var response = TestHelper.CreateResponse(content: "{ }");
             var resource = CreateService(response).Get();
 
             Assert.IsTrue(resource.IsEmpty);
@@ -94,8 +91,8 @@ namespace RestfulieClientTests
 
         [TestMethod]
         public void it_should_use_request_feature() {
-            var response = CreateResponse();
-            var feature = CreateRequestFeature(response);
+            var response = TestHelper.CreateResponse();
+            var feature = TestHelper.CreateRequestFeature(response);
             var service = CreateService(response).With(feature.Object);
             
             service.Get();
@@ -105,8 +102,8 @@ namespace RestfulieClientTests
 
         [TestMethod]
         public void it_should_use_response_feature() {
-            var response = CreateResponse();
-            var feature = CreateResponseFeature(response);
+            var response = TestHelper.CreateResponse();
+            var feature = TestHelper.CreateResponseFeature(response);
             var service = CreateService(response).With(feature.Object);
             
             service.Get();
@@ -116,8 +113,8 @@ namespace RestfulieClientTests
 
         [TestMethod]
         public void it_should_chain_request_features() {
-            var response = CreateResponse();
-            var feature = CreateRequestFeature(response);
+            var response = TestHelper.CreateResponse();
+            var feature = TestHelper.CreateRequestFeature(response);
             var service = CreateService().With(feature.Object).With(feature.Object);
             
             service.Get();
@@ -127,8 +124,8 @@ namespace RestfulieClientTests
 
         [TestMethod]
         public void it_should_chain_response_features() {
-            var response = CreateResponse();
-            var feature = CreateResponseFeature(response);
+            var response = TestHelper.CreateResponse();
+            var feature = TestHelper.CreateResponseFeature(response);
             var service = CreateService(response).With(feature.Object).With(feature.Object);
             
             service.Get();

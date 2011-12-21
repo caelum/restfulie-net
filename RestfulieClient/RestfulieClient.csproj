@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="features\FollowRedirects.cs" />
     <Compile Include="features\IRequestFeature.cs" />
     <Compile Include="features\IResponseFeature.cs" />
+    <Compile Include="features\RetryWhenUnavailable.cs" />
     <Compile Include="http\DefaultRequestDispatcher.cs" />
     <Compile Include="request\IRequestDispatcher.cs" />
     <Compile Include="request\Request.cs" />

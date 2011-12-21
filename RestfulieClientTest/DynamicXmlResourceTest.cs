@@ -1,16 +1,17 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
+using RestfulieClientTests.helpers;
 
 namespace RestfulieClientTests
 {
     [TestClass]
-    public class DynamicXmlResourceTest : BaseTest
+    public class DynamicXmlResourceTest
     {
         [TestMethod]
         public void ShouldBePossibleToLoadAXmlByTheyDynamicObject()
         {
-            dynamic order = GetDynamicResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.date, "the attribute date is no expected");
             Assert.IsNotNull(order.total, "the attribute total is no expected");
         }
@@ -18,7 +19,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToExecuteDynamicMethodsInResource()
         {
-            dynamic order = GetDynamicResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.Pay());
         }
 
@@ -26,7 +27,7 @@ namespace RestfulieClientTests
         [Ignore]
         public void ShouldBeAbleToAnswerToMethodRelName()
         {
-            dynamic order = GetDynamicResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.Update());
 
         }
@@ -34,14 +35,14 @@ namespace RestfulieClientTests
         [TestMethod]
         public void LearningToReadAAtomLinkInXml()
         {
-            dynamic order = GetDynamicResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicResourceWithServiceFake("order.xml");
             Assert.IsNotNull(order.Pay());
         }
 
         [TestMethod]
         public void ShouldBePossibleToAccessResponseHeadersEasily()
         {
-            dynamic order = GetDynamicResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicResourceWithServiceFake("order.xml");
             Assert.AreEqual("application/xml", order.WebResponse.Content_Type);
             Assert.AreEqual("keep-alive", order.WebResponse.Connection);
         }
@@ -49,7 +50,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToAccessFieldsLikeUpdateAt()
         {
-            dynamic order = GetDynamicResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicResourceWithServiceFake("order.xml");
             DateTime date = new DateTime(2010, 01, 01);
             Assert.AreEqual(date, order.Update_At);
         }
@@ -57,7 +58,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToAccessInnerFieldsInAResource()
         {
-            dynamic city = GetDynamicResourceWithServiceFake("city.xml");
+            dynamic city = TestHelper.GetDynamicResourceWithServiceFake("city.xml");
             Assert.AreEqual(18000000, city.Population.Size);
             Assert.AreEqual(10, city.Growth);
         }
@@ -65,7 +66,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToAccessInnerFieldsWithYourRealTypes()
         {       
-            dynamic order = GetDynamicResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicResourceWithServiceFake("order.xml");
             order.NumberFormatInfo = new CultureInfo("en-US", false).NumberFormat;
             Assert.AreEqual(15.00, order.Total);
             Assert.AreEqual(1, order.Id);
@@ -76,7 +77,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToAccessAOtherResourceByLink()
         {
-            dynamic city = GetDynamicResourceWithServiceFake("city.xml");
+            dynamic city = TestHelper.GetDynamicResourceWithServiceFake("city.xml");
             dynamic otherCity = city.Next_Largest();
             Assert.IsNotNull(otherCity);
             Assert.AreEqual("Rio de Janeiro", otherCity.Name);

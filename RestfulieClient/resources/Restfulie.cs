@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using RestfulieClient.features;
 using RestfulieClient.http;
+using RestfulieClient.request;
 using RestfulieClient.service;
-using System.Dynamic;
 
 namespace RestfulieClient.resources
 {
@@ -14,24 +11,35 @@ namespace RestfulieClient.resources
 
         private Restfulie(IRemoteResourceService service)
         {
-            this.EntryPointService = service;
+            EntryPointService = service;
         }
 
-        private Restfulie(string uri)
+        private Restfulie(string uri, IRequestDispatcher dispatcher)
         {
-            this.EntryPointService = new EntryPointService(uri, new DefaultRequestDispatcher());
+            EntryPointService = new EntryPointService(uri, dispatcher);
         }
+
+        private Restfulie(string uri) : this (uri, new DefaultRequestDispatcher()) { }
+
 
         public static IRemoteResourceService At(string uri)
         {
-            Restfulie entryPoint = new Restfulie(uri);
-            return entryPoint.EntryPointService;
+            return new Restfulie(uri).EntryPointService;
+        }
+
+        public static IRemoteResourceService At(string uri, IRequestDispatcher dispatcher, bool useDefaultFeatures = true)
+        {
+            IRemoteResourceService service = new Restfulie(uri, dispatcher).EntryPointService;
+
+            if (useDefaultFeatures)
+                service = service.With(new FollowRedirects());
+
+            return service;
         }
 
         public static IRemoteResourceService At(IRemoteResourceService service)
         {
-            Restfulie entryPoint = new Restfulie(service);
-            return entryPoint.EntryPointService;
+            return new Restfulie(service).EntryPointService;
         }
     }
 }
