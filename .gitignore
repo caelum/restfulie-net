@@ -25,3 +25,5 @@
 _ReSharper.*/
 Thumbs.db
 *.exe
+
+/TestResults

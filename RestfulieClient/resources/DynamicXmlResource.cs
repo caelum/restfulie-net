@@ -2,62 +2,66 @@
 using System.Linq;
 using System.Xml.Linq;
 using System.Dynamic;
-using System.Reflection;
 using RestfulieClient.service;
 using System.Globalization;
 
 namespace RestfulieClient.resources
 {
-    public class DynamicXmlResource : DynamicObject
+    public class DynamicXmlResource : DynamicObject, IResource
     {
-        private StringValueConverter converter = new StringValueConverter();
+        private readonly StringValueConverter _converter = new StringValueConverter();
 
         public HttpRemoteResponse WebResponse { get; private set; }
+
+        public bool IsEmpty {
+            get { return WebResponse.HasNoContent(); } // should check if any nodes exist
+        }
+
         public IRemoteResourceService RemoteResourceService { get; private set; }
         public NumberFormatInfo NumberFormatInfo { get; set; }
         public XElement XmlRepresentation
         {
             get
             {
-                if (this.WebResponse.HasNoContent())
+                if (WebResponse.HasNoContent())
                     return null;
-                else
-                    return XElement.Parse(this.WebResponse.Content);
+                
+                return XElement.Parse(WebResponse.Content);
             }
         }
 
         public DynamicXmlResource(HttpRemoteResponse response)
         {
-            this.WebResponse = response;
-            this.NumberFormatInfo = System.Globalization.NumberFormatInfo.CurrentInfo;
+            WebResponse = response;
+            NumberFormatInfo = NumberFormatInfo.CurrentInfo;
         }
 
         public DynamicXmlResource(HttpRemoteResponse response, IRemoteResourceService remoteService)
             : this(response)
         {
-            this.RemoteResourceService = remoteService;
+            RemoteResourceService = remoteService;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             string fieldName = binder.Name.Replace("_", "-").ToLower();
-            XElement firstElement = this.GetFirstElementWithName(fieldName);
-            result = this.GetValueFromXmlElement(firstElement);
+            XElement firstElement = GetFirstElementWithName(fieldName);
+            result = GetValueFromXmlElement(firstElement);
             return result != null ? true : false;
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            object value = this.GetValueFromAttributeName(binder.Name, "href");
+            object value = GetValueFromAttributeName(binder.Name, "href");
             if (value == null)
                 throw new ArgumentException(string.Format("There is not method defined with name:", binder.Name));
 
-            DynamicXmlResource resource = (DynamicXmlResource)this.InvokeRemoteResource(value.ToString(), binder.Name);
+            DynamicXmlResource resource = (DynamicXmlResource)InvokeRemoteResource(value.ToString(), binder.Name);
 
             if (resource.WebResponse.HasNoContent())
             {
-                result = this.XmlRepresentation;
-                this.UpdateWebResponse(resource.WebResponse);
+                result = XmlRepresentation;
+                UpdateWebResponse(resource.WebResponse);
             }
             else
             {
@@ -70,12 +74,7 @@ namespace RestfulieClient.resources
         {
             try
             {
-                Type remoteResourceServiceType = this.RemoteResourceService.GetType();
-                return remoteResourceServiceType.InvokeMember("Execute",
-                                                                BindingFlags.InvokeMethod |
-                                                                BindingFlags.Public |
-                                                                BindingFlags.Instance,
-                                                                null, this.RemoteResourceService, new Object[] { url, transitionName });
+                return RemoteResourceService.Execute(url, transitionName);
             }
             catch (Exception ex)
             {
@@ -89,11 +88,11 @@ namespace RestfulieClient.resources
             {
                 if (element.HasElements)
                 {
-                    return new DynamicXmlResource(this.WebResponse);
+                    return new DynamicXmlResource(WebResponse);
                 }
                 else
                 {
-                    object result = this.converter.TransformText(element.Value).WithNumberFormatInfo(this.NumberFormatInfo).ToValue();
+                    object result = _converter.TransformText(element.Value).WithNumberFormatInfo(NumberFormatInfo).ToValue();
                     return result;
                 }
             }
@@ -123,7 +122,15 @@ namespace RestfulieClient.resources
 
         private void UpdateWebResponse(HttpRemoteResponse response)
         {
-            this.WebResponse = response;
+            WebResponse = response;
+        }
+
+        public bool HasLink(string rel) {
+            throw new NotImplementedException();
+        }
+
+        public IResource Follow(string rel, string content) {
+            throw new NotImplementedException();
         }
     }
 }

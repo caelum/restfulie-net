@@ -40,9 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="features\IRequestFeature.cs" />
+    <Compile Include="features\IResponseFeature.cs" />
+    <Compile Include="http\DefaultRequestDispatcher.cs" />
+    <Compile Include="request\IRequestDispatcher.cs" />
+    <Compile Include="request\Request.cs" />
+    <Compile Include="request\RequestChain.cs" />
+    <Compile Include="request\RequestStack.cs" />
+    <Compile Include="request\ResponseChain.cs" />
     <Compile Include="resources\DynamicXmlResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="resources\Restifulie.cs" />
+    <Compile Include="resources\EmptyResource.cs" />
+    <Compile Include="resources\IResource.cs" />
+    <Compile Include="resources\Restfulie.cs" />
     <Compile Include="resources\EntryPointService.cs" />
     <Compile Include="service\HttpRemoteResponseFactory.cs" />
     <Compile Include="service\HttpRemoteResponse.cs" />

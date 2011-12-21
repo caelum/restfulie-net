@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RestfulieClient.http;
 using RestfulieClient.service;
 using System.Dynamic;
 
@@ -18,7 +19,7 @@ namespace RestfulieClient.resources
 
         private Restfulie(string uri)
         {
-            this.EntryPointService = new EntryPointService(uri);
+            this.EntryPointService = new EntryPointService(uri, new DefaultRequestDispatcher());
         }
 
         public static IRemoteResourceService At(string uri)

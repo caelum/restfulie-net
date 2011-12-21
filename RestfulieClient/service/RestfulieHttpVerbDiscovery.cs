@@ -9,8 +9,8 @@ namespace RestfulieClient.service
     {
 
         private const string GET = "GET";
+        private const string PUT = "PUT";
         private const string POST = "POST";
-        private const string UPDATE = "UPDATE";
         private const string DELETE = "DELETE";
 
         private Dictionary<string, string> verbNames;
@@ -40,7 +40,8 @@ namespace RestfulieClient.service
             verbNames.Add("Cancel",DELETE);
             verbNames.Add("Destroy", DELETE);
             verbNames.Add("Delete", DELETE);
-            verbNames.Add("Update", POST);
+            verbNames.Add("Create", POST);
+            verbNames.Add("Update", PUT);
             verbNames.Add("Refresh", GET);
             verbNames.Add("Reload", GET);
             verbNames.Add("Show", GET);
