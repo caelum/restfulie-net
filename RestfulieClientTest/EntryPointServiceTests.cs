@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RestfulieClient.request;
@@ -131,6 +132,27 @@ namespace RestfulieClientTests
             service.Get();
 
             feature.Verify(f => f.Process(It.IsAny<ResponseChain>(), It.IsAny<HttpRemoteResponse>()), Times.Exactly(2));
+        }
+        
+        [TestMethod]
+        public void it_should_support_asynch_requests() {
+            var complete = false;
+            var ticks = Environment.TickCount;
+
+            var service = CreateService().Asynch((r, s) => {
+                complete = true;
+
+                Assert.IsNotNull(r);
+                Assert.AreEqual(HttpStatusCode.OK, r.WebResponse.StatusCode);
+                Assert.AreEqual("state", s);
+            }, "state");
+
+            Assert.IsNull(service.Get(), "Service return synchronous resource");
+
+            while (!complete && Environment.TickCount < ticks + 5000)
+                Thread.Sleep(1000);
+
+            Assert.IsTrue(complete, "Did not receive response before timeout");
         }
     }
 }

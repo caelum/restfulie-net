@@ -15,9 +15,16 @@ namespace RestfulieClient.resources
         private readonly IList<IResponseFeature> _responseFeatures = new List<IResponseFeature>();
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
         private readonly RestfulieHttpVerbDiscovery _httpVerbDiscovery = new RestfulieHttpVerbDiscovery();
+        private bool _asych;
+        private RestfulieCallback _clientCallback;
+        private object _clientCallbackState;
 
         public IRequestDispatcher Dispatcher {
             get { return _dispatcher; }
+        }
+
+        public bool IsAsynch {
+            get { return _asych; }
         }
 
         public IDictionary<string, string> Headers {
@@ -27,6 +34,48 @@ namespace RestfulieClient.resources
         public EntryPointService(string uri, IRequestDispatcher dispatcher) {
             _entryPointUri = uri;
             _dispatcher = dispatcher;
+        }
+
+        private IResource ParseResponse(HttpRemoteResponse response) {
+            if (response.StatusCode >= HttpStatusCode.BadRequest ||
+                response.HasNoContent() || !response.Headers.ContainsKey("Content-Type"))
+                return new EmptyResource(response);
+
+            if (response.Headers["Content-Type"].IndexOf("application/xml", StringComparison.OrdinalIgnoreCase) > -1)
+                return new DynamicXmlResource(response, this);
+
+            throw new InvalidOperationException("unsupported media type: " + response.Headers["Content-Type"]);
+        }
+        
+        private void AsynchCallback(HttpRemoteResponse response, object state) {
+            var callback = _clientCallback;
+
+            if (callback != null)
+                callback(ParseResponse(response), _clientCallbackState);
+        }
+
+        private IResource Process(Uri uri, string verb, string content) {
+            var request = new Request(this, _dispatcher);
+
+            foreach (var feature in _requestFeatures)
+                request.AddFeature(feature);
+            foreach (var feature in _responseFeatures)
+                request.AddFeature(feature);
+
+            if (_asych) {
+                new AsynchRequest(request, AsynchCallback).Process(uri, verb, content);
+                return null;
+            }
+
+#if SILVERLIGHT
+            throw new InvalidOperationException("Silverlight must be run in async mode by calling Asynch before any executing methods (e.g. Get)");
+#endif
+
+            return ParseResponse(request.Process(uri, verb, content));
+        }
+
+        private string GetVerb(string transitionName) {
+            return _httpVerbDiscovery.GetHttpVerbByTransitionName(transitionName);
         }
 
         public IRemoteResourceService As(string mediaType) {
@@ -40,25 +89,17 @@ namespace RestfulieClient.resources
         public IRemoteResourceService Handling(string mediaType) {
             return As(mediaType).Accepts(mediaType);
         }
+        
+        public IRemoteResourceService Asynch(RestfulieCallback callback, object state) {
+            _asych = true;
+            _clientCallback = callback;
+            _clientCallbackState = state;
+            return this;
+        }
 
         public IRemoteResourceService With(string name, string value) {
             _headers.Add(name, value);
             return this;
-        }
-
-        private string GetVerb(string transitionName) {
-            return _httpVerbDiscovery.GetHttpVerbByTransitionName(transitionName);
-        }
-
-        private IResource ParseResponse(HttpRemoteResponse response) {
-            if (response.StatusCode >= HttpStatusCode.BadRequest ||
-                response.HasNoContent() || !response.Headers.ContainsKey("Content-Type"))
-                return new EmptyResource(response);
-
-            if (response.Headers["Content-Type"].IndexOf("application/xml", StringComparison.OrdinalIgnoreCase) > -1)
-                return new DynamicXmlResource(response, this);
-
-            throw new InvalidOperationException("unsupported media type: " + response.Headers["Content-Type"]);
         }
 
         public IRemoteResourceService With(IRequestFeature requestFeature) {
@@ -69,17 +110,6 @@ namespace RestfulieClient.resources
         public IRemoteResourceService With(IResponseFeature responseFeature) {
             _responseFeatures.Add(responseFeature);
             return this;
-        }
-
-        private IResource Process(Uri uri, string verb, string content) {
-            var request = new Request(this, _dispatcher);
-
-            foreach (var feature in _requestFeatures)
-                request.AddFeature(feature);
-            foreach (var feature in _responseFeatures)
-                request.AddFeature(feature);
-
-            return ParseResponse(request.Process(uri, verb, content));
         }
 
         private IResource Process(string uri, string verb, string content) {

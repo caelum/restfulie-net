@@ -1,11 +1,19 @@
 ﻿using System.Collections.Generic;
 using RestfulieClient.features;
 using RestfulieClient.request;
+using RestfulieClient.resources;
 
 namespace RestfulieClient.service
 {
+    public delegate void RestfulieCallback(IResource resource, object state);
+
     public interface IRemoteResourceService
     {
+        /// <summary>
+        /// Returns whether the service has been configured to run asynchronously
+        /// </summary>
+        bool IsAsynch { get; }
+
         /// <summary>
         /// Returns the registered dispatcher for this service
         /// </summary>
@@ -30,6 +38,12 @@ namespace RestfulieClient.service
         /// Shortcut to specify Accept and As together
         /// </summary>
         IRemoteResourceService Handling(string mediaType);
+
+        /// <summary>
+        /// Flags the service to dispatch asynchronously and return results to the provided callback
+        /// </summary>
+        /// <returns></returns>
+        IRemoteResourceService Asynch(RestfulieCallback callback, object state);
 
         /// <summary>
         /// Allows a custom header to be set for requests
