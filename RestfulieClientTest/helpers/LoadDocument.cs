@@ -8,7 +8,8 @@ namespace RestfulieClientTests.helpers
     public class LoadDocument
     {
         private static readonly IDictionary<string, string> ContentTypeNamespaces = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
-            { "application/xml", "xmls" }
+            { "application/xml", "xmls" },
+            { "application/json", "jsons" }
         };
 
         private readonly string _contentType;

@@ -48,13 +48,14 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicJsonResourceTest.cs" />
     <Compile Include="features\AutoRefreshTests.cs" />
     <Compile Include="features\FollowRedirectsTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="helpers\TestHelper.cs" />
     <Compile Include="DynamicXmlResourceTest.cs" />
-    <Compile Include="EntryPointServiceTests.cs" />
+    <Compile Include="EntryPointServiceTest.cs" />
     <Compile Include="helpers\EmbeddedFileResourceDispatcher.cs" />
     <Compile Include="helpers\LoadDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,6 +79,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="xmls\city.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="jsons\city.json" />
+    <EmbeddedResource Include="jsons\order.json" />
+    <EmbeddedResource Include="jsons\orderWithoutLinks.json" />
+    <EmbeddedResource Include="jsons\otherCity.json" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

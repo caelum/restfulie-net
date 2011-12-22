@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\libs\Newtonsoft.Json-4.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,6 +56,7 @@
     <Compile Include="request\RequestChain.cs" />
     <Compile Include="request\RequestStack.cs" />
     <Compile Include="request\ResponseChain.cs" />
+    <Compile Include="resources\DynamicJsonResource.cs" />
     <Compile Include="resources\DynamicXmlResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="resources\EmptyResource.cs" />

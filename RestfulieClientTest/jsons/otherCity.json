@@ -1,0 +1,12 @@
+﻿{
+	"name": "Rio de Janeiro",
+	"population": {
+		"size": 18000000,
+		"growth": 10
+	},
+	"updated-at": "01/01/2010",
+	"link": {
+		"rel": "next_largest",
+		"href": "othercity.xml"
+	}
+}

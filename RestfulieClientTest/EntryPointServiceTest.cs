@@ -12,7 +12,7 @@ using RestfulieClientTests.helpers;
 namespace RestfulieClientTests
 {
     [TestClass]
-    public class EntryPointServiceTests
+    public class EntryPointServiceTest
     {
         private IRemoteResourceService CreateService(HttpRemoteResponse response = null, IRequestDispatcher dispatcher = null) {
             if (response == null)

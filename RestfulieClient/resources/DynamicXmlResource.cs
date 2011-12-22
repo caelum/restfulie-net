@@ -50,31 +50,43 @@ namespace RestfulieClient.resources
             return result != null ? true : false;
         }
 
+        private object FollowLink(string rel, string href, string content = null) {
+            var resource = (IResource)InvokeRemoteResource(href, rel, content);
+            object result;
+
+            if (resource.WebResponse.HasNoContent()) {
+                result = XmlRepresentation;
+                WebResponse = resource.WebResponse;
+            }
+            else
+                result = resource;
+
+            return result;
+        }
+
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
             object value = GetValueFromAttributeName(binder.Name, "href");
             if (value == null)
                 throw new ArgumentException(string.Format("There is not method defined with name:", binder.Name));
 
-            DynamicXmlResource resource = (DynamicXmlResource)InvokeRemoteResource(value.ToString(), binder.Name);
+            string content = null;
 
-            if (resource.WebResponse.HasNoContent())
-            {
-                result = XmlRepresentation;
-                UpdateWebResponse(resource.WebResponse);
-            }
-            else
-            {
-                result = resource;
-            }
+            if (args != null && args.Length == 1)
+                content = args.First() as string;
+
+            result = FollowLink(binder.Name, (string)value, content);
+
             return result != null ? true : false;
         }
 
-        private object InvokeRemoteResource(string url, string transitionName)
+        private object InvokeRemoteResource(string uri, string transitionName, string content)
         {
             try
             {
-                return RemoteResourceService.Execute(url, transitionName);
+                return String.IsNullOrWhiteSpace(content)
+                    ? RemoteResourceService.Execute(uri, transitionName)
+                    : RemoteResourceService.Execute(uri, transitionName, content);
             }
             catch (Exception ex)
             {
@@ -120,16 +132,24 @@ namespace RestfulieClient.resources
             return null;
         }
 
-        private void UpdateWebResponse(HttpRemoteResponse response)
-        {
-            WebResponse = response;
-        }
-
         public bool HasLink(string rel) {
-            throw new NotImplementedException();
+            return GetValueFromAttributeName(rel, "href") != null;
         }
 
         public IResource Follow(string rel, string content) {
+            var link = GetValueFromAttributeName(rel, "href");
+
+            if (link == null)
+                throw new ArgumentException(String.Format("There is no link defined with rel: {0}", rel));
+
+            return FollowLink(rel, (string)link, content) as IResource; // Note: need to fix up XElement result
+        }
+
+        public T As<T>() where T : class {
+            throw new NotImplementedException();
+        }
+
+        public T[] AsMany<T>() where T : class {
             throw new NotImplementedException();
         }
     }

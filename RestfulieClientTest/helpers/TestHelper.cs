@@ -21,11 +21,11 @@ namespace RestfulieClientTests.helpers
 
             service.SetupGet(s => s.Headers).Returns(headers);
             service.Setup(s => s.Execute(It.IsAny<string>()))
-                .Returns<string>(u => GetDynamicResourceWithServiceFake(u, contentType));
+                .Returns<string>(u => GetDynamicXmlResourceWithServiceFake(u));
             service.Setup(s => s.Execute(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns<string, string>((u, t) => GetDynamicResourceWithServiceFake(u, contentType));
+                .Returns<string, string>((u, t) => GetDynamicXmlResourceWithServiceFake(u));
             service.Setup(s => s.Execute(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns<string, string, object>((u, t, p) => GetDynamicResourceWithServiceFake(u, contentType));
+                .Returns<string, string, object>((u, t, p) => GetDynamicXmlResourceWithServiceFake(u));
 
             return service;
         }
@@ -64,12 +64,12 @@ namespace RestfulieClientTests.helpers
             return responseFeature;
         }
 
-        public static DynamicXmlResource GetDynamicResourceWithServiceFake(string rawUri, string contentType = "application/xml")
+        private static HttpRemoteResponse GetDynamicResourceWithServiceFake(string rawUri, string contentType, out IRemoteResourceService service)
         {
+            var serviceMock = CreateService(rawUri, contentType);
             var uri = rawUri.StartsWith("http://") ? new Uri(rawUri) : new Uri(String.Format("file://{0}", rawUri));
             var dispatcher = new EmbeddedFileRequestDispatcher(contentType);
-            var service = CreateService(rawUri, contentType);
-            var response = dispatcher.Process(service.Object, "GET", uri, null);
+            var response = dispatcher.Process(serviceMock.Object, "GET", uri, null);
 
             response.Headers.Add("X-Runtime", "29");
             response.Headers.Add("Connection", "keep-alive");
@@ -80,7 +80,25 @@ namespace RestfulieClientTests.helpers
             response.Headers.Add("Server", "nginx/0.6.39");
             response.Headers.Add("Via", "1.1 varnish");
 
-            return new DynamicXmlResource(response, service.Object);
+            service = serviceMock.Object;
+
+            return response;
+        }
+
+        public static DynamicXmlResource GetDynamicXmlResourceWithServiceFake(string rawUri) {
+            IRemoteResourceService service;
+
+            HttpRemoteResponse response = GetDynamicResourceWithServiceFake(rawUri, "application/xml", out service);
+
+            return new DynamicXmlResource(response, service);
+        }
+
+        public static DynamicJsonResource GetDynamicJsonResourceWithServiceFake(string rawUri) {
+            IRemoteResourceService service;
+
+            HttpRemoteResponse response = GetDynamicResourceWithServiceFake(rawUri, "application/json", out service);
+
+            return new DynamicJsonResource(response, service);
         }
     }
 }

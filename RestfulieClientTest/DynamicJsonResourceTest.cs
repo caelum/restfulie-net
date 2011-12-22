@@ -1,17 +1,17 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestfulieClientTests.helpers;
 
 namespace RestfulieClientTests
 {
     [TestClass]
-    public class DynamicXmlResourceTest
+    public class DynamicJsonResourceTest
     {
         [TestMethod]
-        public void ShouldBePossibleToLoadAXmlByTheDynamicObject()
+        public void ShouldBePossibleToLoadAJsonByTheDynamicObject()
         {
-            dynamic order = TestHelper.GetDynamicXmlResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicJsonResourceWithServiceFake("order.json");
             Assert.IsNotNull(order.date, "the attribute date is no expected");
             Assert.IsNotNull(order.total, "the attribute total is no expected");
         }
@@ -19,7 +19,7 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToExecuteDynamicMethodsInResource()
         {
-            dynamic order = TestHelper.GetDynamicXmlResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicJsonResourceWithServiceFake("order.json");
             Assert.IsNotNull(order.Pay());
         }
 
@@ -27,7 +27,7 @@ namespace RestfulieClientTests
         [Ignore]
         public void ShouldBeAbleToAnswerToMethodRelName()
         {
-            dynamic order = TestHelper.GetDynamicXmlResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicJsonResourceWithServiceFake("order.json");
             Assert.IsNotNull(order.Update());
 
         }
@@ -35,22 +35,22 @@ namespace RestfulieClientTests
         [TestMethod]
         public void LearningToReadAAtomLinkInXml()
         {
-            dynamic order = TestHelper.GetDynamicXmlResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicJsonResourceWithServiceFake("order.json");
             Assert.IsNotNull(order.Pay());
         }
 
         [TestMethod]
         public void ShouldBePossibleToAccessResponseHeadersEasily()
         {
-            dynamic order = TestHelper.GetDynamicXmlResourceWithServiceFake("order.xml");
-            Assert.AreEqual("application/xml", order.WebResponse.Content_Type);
+            dynamic order = TestHelper.GetDynamicJsonResourceWithServiceFake("order.json");
+            Assert.AreEqual("application/json", order.WebResponse.Content_Type);
             Assert.AreEqual("keep-alive", order.WebResponse.Connection);
         }
 
         [TestMethod]
         public void ShouldBePossibleToAccessFieldsLikeUpdateAt()
         {
-            dynamic order = TestHelper.GetDynamicXmlResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicJsonResourceWithServiceFake("order.json");
             DateTime date = new DateTime(2010, 01, 01);
             Assert.AreEqual(date, order.Update_At);
         }
@@ -58,15 +58,15 @@ namespace RestfulieClientTests
         [TestMethod]
         public void ShouldBePossibleToAccessInnerFieldsInAResource()
         {
-            dynamic city = TestHelper.GetDynamicXmlResourceWithServiceFake("city.xml");
+            dynamic city = TestHelper.GetDynamicJsonResourceWithServiceFake("city.json");
             Assert.AreEqual(18000000, city.Population.Size);
-            Assert.AreEqual(10, city.Growth);
+            Assert.AreEqual(10, city.Population.Growth);
         }
 
         [TestMethod]
         public void ShouldBePossibleToAccessInnerFieldsWithYourRealTypes()
         {       
-            dynamic order = TestHelper.GetDynamicXmlResourceWithServiceFake("order.xml");
+            dynamic order = TestHelper.GetDynamicJsonResourceWithServiceFake("order.json");
             order.NumberFormatInfo = new CultureInfo("en-US", false).NumberFormat;
             Assert.AreEqual(15.00, order.Total);
             Assert.AreEqual(1, order.Id);
@@ -75,9 +75,9 @@ namespace RestfulieClientTests
         }
 
         [TestMethod]
-        public void ShouldBePossibleToAccessAOtherResourceByLink()
+        public void ShouldBePossibleToAccessAnotherResourceByLink()
         {
-            dynamic city = TestHelper.GetDynamicXmlResourceWithServiceFake("city.xml");
+            dynamic city = TestHelper.GetDynamicJsonResourceWithServiceFake("city.json");
             dynamic otherCity = city.Next_Largest();
             Assert.IsNotNull(otherCity);
             Assert.AreEqual("Rio de Janeiro", otherCity.Name);

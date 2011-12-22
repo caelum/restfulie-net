@@ -40,6 +40,9 @@ namespace RestfulieClient.resources
             if (contentType.IndexOf("application/xml", StringComparison.OrdinalIgnoreCase) > -1 ||
                 contentType.IndexOf("text/xml", StringComparison.OrdinalIgnoreCase) > -1)
                 return new DynamicXmlResource(response, this);
+            if (contentType.IndexOf("application/json", StringComparison.OrdinalIgnoreCase) > -1 ||
+                contentType.IndexOf("text/json", StringComparison.OrdinalIgnoreCase) > -1)
+                return new DynamicJsonResource(response, this);
 
             return null;
         }

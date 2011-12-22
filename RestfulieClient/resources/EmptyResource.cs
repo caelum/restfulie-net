@@ -18,7 +18,15 @@ namespace RestfulieClient.resources
         }
 
         public IResource Follow(string rel, string content) {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Empty resource does not have anything to follow");
+        }
+
+        public T As<T>() where T : class {
+            throw new NotImplementedException("Empty resource cannot be converted");
+        }
+
+        public T[] AsMany<T>() where T : class {
+            throw new NotImplementedException("Empty resource cannot be converted");
         }
     }
 }
