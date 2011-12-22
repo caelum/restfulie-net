@@ -72,8 +72,11 @@
     <Compile Include="..\RestfulieClient\http\DefaultRequestDispatcher.cs">
       <Link>http\DefaultRequestDispatcher.cs</Link>
     </Compile>
-    <Compile Include="..\RestfulieClient\request\AsyncRequest.cs">
-      <Link>request\AsyncRequest.cs</Link>
+    <Compile Include="..\RestfulieClient\request\AsynchHelper.cs">
+      <Link>request\AsynchHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\RestfulieClient\request\AsynchRequest.cs">
+      <Link>request\AsynchRequest.cs</Link>
     </Compile>
     <Compile Include="..\RestfulieClient\request\IRequestDispatcher.cs">
       <Link>request\IRequestDispatcher.cs</Link>

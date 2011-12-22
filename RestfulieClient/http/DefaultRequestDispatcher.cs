@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
 using RestfulieClient.request;
 using RestfulieClient.service;
 
@@ -20,40 +19,9 @@ namespace RestfulieClient.http
             using (var reader = new StreamReader(stream))
                 return reader.ReadToEnd();
         }
-
-        private T WaitForAsynchResponse<T>(Func<AsyncCallback, IAsyncResult> beginDelegate, Func<IAsyncResult, object, T> endDelegate) {
-            AutoResetEvent waitHandle = new AutoResetEvent(false);
-            Exception exception = null;
-            T response = default(T);
-
-            AsyncCallback callback = state => {
-                try {
-                    response = endDelegate(state, _asynchResult);
-                }
-                catch (Exception e) {
-                    exception = e;
-                }
-                finally {
-                    waitHandle.Set();
-                }
-            };
-
-            _asynchResult = beginDelegate(callback);
-
-            if (_asynchResult.CompletedSynchronously) return response;
-
-            var hasSignal = waitHandle.WaitOne(TimeSpan.FromSeconds(5));
-
-            if (!hasSignal)
-                throw new TimeoutException("No response received in time");
-
-            if (exception != null) throw exception;
-
-            return response;
-        }
         
         private Stream GetRequestStreamAsynch(HttpWebRequest request) {
-            return WaitForAsynchResponse(
+            return AsynchHelper.WaitForAsynchResponse(
                 c => request.BeginGetRequestStream(c, null),
                 (r, s) => request.EndGetRequestStream(r)
             );
@@ -83,10 +51,8 @@ namespace RestfulieClient.http
                 GetContent(response));
         }
 
-        private IAsyncResult _asynchResult;
-
         private HttpWebResponse GetResponseAsynch(HttpWebRequest request) {
-            return WaitForAsynchResponse(
+            return AsynchHelper.WaitForAsynchResponse(
                 c => request.BeginGetResponse(c, null),
                 (r, s) => (HttpWebResponse)request.EndGetResponse(r)
             );
