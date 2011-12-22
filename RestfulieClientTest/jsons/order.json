@@ -1,0 +1,13 @@
+﻿{
+	"id": 1,
+	"date": "26/11/2009",
+	"total": 15.00,
+	"status": "unpaid",
+	"update-at": "01/01/2010",
+	"links": [
+		{ "rel": "refresh", "href": "http://localhost:3000/orders/1" },
+		{ "rel": "update", "href": "http://localhost:3000/orders/1" },
+		{ "rel": "pay", "href": "http://localhost:3000/orders/1" },
+		{ "rel": "destroy", "href": "http://localhost:3000/orders/1" }
+	]
+}

@@ -1,7 +1,8 @@
-﻿using System.Net;
+﻿using System;
+using System.Linq;
+using System.Net;
 using System.Dynamic;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace RestfulieClient.service
 {
@@ -13,15 +14,18 @@ namespace RestfulieClient.service
 
         public HttpRemoteResponse(HttpStatusCode statusCode, Dictionary<string, string> headers, string content)
         {
-            this.StatusCode = statusCode;
-            this.Headers = headers;
-            this.Content = content;
+            if (headers == null)
+                throw new ArgumentNullException("headers");
+
+            StatusCode = statusCode;
+            Headers = headers.ToDictionary(p => p.Key, p => p.Value, StringComparer.OrdinalIgnoreCase); // make a copy for better comparisons
+            Content = content;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             string headerValue = "";
-            if (Headers.TryGetValue(binder.Name.ToUpper(), out headerValue))
+            if (Headers.TryGetValue(binder.Name.Replace("_", "-"), out headerValue))
             {
                 result = headerValue;
                 return true;
@@ -35,7 +39,7 @@ namespace RestfulieClient.service
 
         public bool HasNoContent()
         {
-            return Content.Equals("");
+            return String.IsNullOrEmpty(Content);
         }
     }
 }
