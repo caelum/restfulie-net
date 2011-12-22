@@ -117,7 +117,7 @@ namespace RestfulieClient.http
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(string.Format("An error occurred while connecting to the resource in url {0} with message {1}.", uri, ex.Message), ex);
+                throw new ArgumentException(string.Format("An error occurred while connecting to the resource in url {0} with message {1}", uri, ex.Message), ex);
             }
         }
     }

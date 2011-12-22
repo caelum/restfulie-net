@@ -36,13 +36,24 @@ namespace RestfulieClient.resources
             _dispatcher = dispatcher;
         }
 
+        private IResource CreateResource(string contentType, HttpRemoteResponse response) {
+            if (contentType.IndexOf("application/xml", StringComparison.OrdinalIgnoreCase) > -1 ||
+                contentType.IndexOf("text/xml", StringComparison.OrdinalIgnoreCase) > -1)
+                return new DynamicXmlResource(response, this);
+
+            return null;
+        }
+
         private IResource ParseResponse(HttpRemoteResponse response) {
             if (response.StatusCode >= HttpStatusCode.BadRequest ||
                 response.HasNoContent() || !response.Headers.ContainsKey("Content-Type"))
                 return new EmptyResource(response);
 
-            if (response.Headers["Content-Type"].IndexOf("application/xml", StringComparison.OrdinalIgnoreCase) > -1)
-                return new DynamicXmlResource(response, this);
+            string contentType = response.Headers["Content-Type"];
+            IResource resource = CreateResource(contentType, response);
+
+            if (resource != null)
+                return resource;
 
             throw new InvalidOperationException("unsupported media type: " + response.Headers["Content-Type"]);
         }
