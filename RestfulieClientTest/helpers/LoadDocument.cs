@@ -1,33 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Reflection;
-using System.Xml;
-
-
 
 namespace RestfulieClientTests.helpers
 {
     public class LoadDocument
     {
+        private static readonly IDictionary<string, string> ContentTypeNamespaces = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+            { "application/xml", "xmls" },
+            { "application/json", "jsons" }
+        };
 
-        public string GetDocumentContent(string fileName)
-        {
-            string filePath = "RestfulieClientTests.xmls." + fileName;
-            Stream fileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath);
-            XmlDocument data = null;
-            if (fileStream != null)
-            {
-                data = new XmlDocument();
-                data.Load(fileStream);
-                if (data.InnerXml != null)
-                    return data.InnerXml;
-                else 
-                    return "";
-            }
-            else return "";
+        private readonly string _contentType;
+
+        public LoadDocument(string contentType) {
+            _contentType = contentType;
+        }
+
+        public string GetDocumentContent(string fileName) {
+            var filePath = String.Format("RestfulieClientTests.{0}.{1}", ContentTypeNamespaces[_contentType], fileName);
+
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath))
+                return stream == null ? "" : new StreamReader(stream).ReadToEnd();
         }
     }
 }

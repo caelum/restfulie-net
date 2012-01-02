@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RestfulieClient.resources;
-using Rhino.Mocks;
-using RestfulieClientTests.helpers;
 using RestfulieClient.service;
 using System.Net;
-using System.Dynamic;
 
 namespace RestfulieClientTests.helpers
 {

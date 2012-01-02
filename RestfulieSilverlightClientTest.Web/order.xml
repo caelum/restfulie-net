@@ -1,0 +1,12 @@
+﻿<order>
+  <id>1</id>
+  <date>26/11/2009</date>
+  <total>15.00</total>
+  <status>unpaid</status>
+  <update-at>01/01/2010</update-at>
+  <atom:link rel="refresh" href="http://localhost:3000/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+  <atom:link rel="update" href="http://localhost:3000/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+  <atom:link rel="pay" href="http://localhost:3000/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>
+  <atom:link rel="destroy" href="http://localhost:3000/orders/1" xmlns:atom="http://www.w3.org/2005/Atom"/>  
+</order>
+

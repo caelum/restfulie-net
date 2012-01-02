@@ -22,7 +22,11 @@ namespace RestfulieClient.service
 
         private static String GetContentFromStream(Stream ResponseStream)
         {
+#if SILVERLIGHT
+            Stream stream = ResponseStream;
+#else
             BufferedStream stream = new BufferedStream(ResponseStream);
+#endif
             StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
@@ -31,11 +35,11 @@ namespace RestfulieClient.service
         {
             string pattern = "\\s+";
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
-            for (int i = 0; i < headers.Keys.Count; i++)
+            foreach (string rawKey in headers.AllKeys)
             {
-                string key = headers.GetKey(i).Replace("-", " ").ToUpper();
+                string key = rawKey.Replace("-", " ").ToUpper();
                 key = Regex.Replace(key, pattern, "");
-                string value = headers.Get(headers.GetKey(i));
+                string value = headers[rawKey];
                 //System.Console.WriteLine("Key => " + key + " Value => " + value);
                 dictionary.Add(key, value);
             }

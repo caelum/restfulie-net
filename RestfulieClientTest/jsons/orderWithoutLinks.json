@@ -1,0 +1,11 @@
+﻿{
+	"id": 1,
+	"date": "26/11/2009",
+	"total": 15.00,
+	"status": "unpaid",
+	"update-at": "01/01/2010",
+	"refresh": "http://localhost:3000/orders/1",
+	"update": "http://localhost:3000/orders/1",
+	"pay": "http://localhost:3000/orders/1",
+	"destroy": "http://localhost:3000/orders/1"
+}
